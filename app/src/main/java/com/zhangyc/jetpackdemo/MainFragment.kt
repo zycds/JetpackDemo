@@ -12,9 +12,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>() {
-
     private var mDisposable : Disposable? = null
-
     companion object {
         val TAG = MainFragment::class.java.simpleName
     }
