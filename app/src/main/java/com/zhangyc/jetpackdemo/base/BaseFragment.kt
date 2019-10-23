@@ -9,6 +9,20 @@ import com.zhangyc.jetpackdemo.proxy.ProxyFragment
 
 abstract class BaseFragment<P : IBasePresenter> : ProxyFragment() {
 
+    override fun onClick(p0: View?) {
+        handlerClickListener(p0?.id)
+    }
+
+    protected fun setOnClickListeners(vararg views : View) {
+        for(v in views) {
+            v.setOnClickListener(this)
+        }
+    }
+
+    open fun handlerClickListener (id : Int?){
+        if (id == null) return
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         init()

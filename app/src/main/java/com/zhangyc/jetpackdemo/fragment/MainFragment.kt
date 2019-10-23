@@ -1,8 +1,10 @@
-package com.zhangyc.jetpackdemo
+package com.zhangyc.jetpackdemo.fragment
 
 import android.content.Context
 import android.util.Log
+import android.view.View
 import androidx.navigation.fragment.NavHostFragment
+import com.zhangyc.jetpackdemo.R
 import com.zhangyc.jetpackdemo.base.BaseFragment
 import com.zhangyc.jetpackdemo.http.HttpApi
 import com.zhangyc.jetpackdemo.mvp.MainFragmentContact
@@ -12,10 +14,21 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>() {
+
     private var mDisposable : Disposable? = null
 
     companion object {
         val TAG = MainFragment::class.java.simpleName
+    }
+
+
+    override fun handlerClickListener(id: Int?) {
+        super.handlerClickListener(id)
+        when(id){
+            R.id.text_main_container->{
+                NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_loginFragment)
+            }
+        }
     }
 
     override fun getLayoutResId(): Int {
@@ -27,10 +40,7 @@ class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>() {
     }
 
     override fun initData() {
-        text_main_container.setOnClickListener {
-            NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_splashActivity)
-        }
-
+        setOnClickListeners(text_main_container)
         refreshData()
     }
 
