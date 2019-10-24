@@ -39,6 +39,8 @@ class LoginFragment : BaseFragment<LoginContact.LoginPresenter>(){
     override fun initData() {
         btn_submit.setOnClickListener(this)
         register.setOnClickListener(this)
+        edit_username.setText(arguments?.getString("username"))
+        edit_password.setText(arguments?.getString("password"))
     }
 
     override fun refreshData() {

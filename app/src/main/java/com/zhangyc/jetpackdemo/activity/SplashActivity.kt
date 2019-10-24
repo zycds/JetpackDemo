@@ -18,13 +18,12 @@ import com.zhangyc.jetpackdemo.R
 import com.zhangyc.jetpackdemo.annotations.InjectPresenter
 import com.zhangyc.jetpackdemo.base.BaseActivity
 import com.zhangyc.jetpackdemo.mvp.SplashContact
+import com.zhangyc.jetpackdemo.room.AppDataBase
+import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.jetpackdemo.viewmodel.TestViewModel
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashContact.ISplashView {
-    override fun onClick(p0: View?) {
-
-    }
 
     private val loggerTag = SplashActivity::class.java.simpleName
 
@@ -55,6 +54,9 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
 
         get.password = ""
 
+
+
+
     }
 
     override fun refreshData() {
@@ -64,7 +66,17 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
     override fun resume() {
         super.resume()
         (application as App).getMainHandler().postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
+            val userDao = AppDataBase.getDBInstance().getUserDao()
+            val allUsers = userDao.getAllUsers()
+            for(user in allUsers) {
+                Lg.info(tag, "user : ${user.username}")
+            }
+            val intent = Intent(this, MainActivity::class.java)
+            if (allUsers.size > 0) {
+                intent.putExtra("username", allUsers[0].username)
+                intent.putExtra("password", allUsers[0].password)
+            }
+            startActivity(intent)
         }, 3000)
     }
 

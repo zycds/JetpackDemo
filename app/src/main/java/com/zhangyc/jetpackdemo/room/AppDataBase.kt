@@ -9,18 +9,25 @@ import com.zhangyc.jetpackdemo.entities.Entities
 @Database(entities = [Entities.User::class], version = 1)
 abstract class AppDataBase : RoomDatabase() {
 
-    abstract fun getUserDao() : UserDao
-
+    abstract fun getUserDao(): UserDao
 
     companion object {
 
         @Volatile
-        private var instance : AppDataBase? = null
+        private var instance: AppDataBase? = null
 
-        fun getDBInstance() : AppDataBase {
+        fun getDBInstance(): AppDataBase {
+
             if (instance == null) {
-                synchronized(AppDataBase::class){
+                synchronized(AppDataBase::class) {
                     if (instance == null) {
+                        instance = Room.databaseBuilder(
+                            App.instance().applicationContext,
+                            AppDataBase::class.java,
+                            "jetpack.db"
+                        )
+                            .allowMainThreadQueries()
+                            .build()
                     }
                 }
             }

@@ -5,9 +5,11 @@ import android.util.Log
 import android.view.View
 import androidx.navigation.fragment.NavHostFragment
 import com.zhangyc.jetpackdemo.R
+import com.zhangyc.jetpackdemo.annotations.InjectPresenter
 import com.zhangyc.jetpackdemo.base.BaseFragment
 import com.zhangyc.jetpackdemo.http.HttpApi
 import com.zhangyc.jetpackdemo.mvp.MainFragmentContact
+import com.zhangyc.jetpackdemo.utils.Lg
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -15,11 +17,9 @@ import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>() {
 
-    private var mDisposable : Disposable? = null
 
-    companion object {
-        val TAG = MainFragment::class.java.simpleName
-    }
+    @InjectPresenter
+    lateinit var mPresenter: MainFragmentContact.MainFragmentPresenter
 
 
     override fun handlerClickListener(id: Int?) {
@@ -37,27 +37,22 @@ class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>() {
 
     override fun init() {
 
+        val register = arguments?.getBoolean("register")
+        Lg.info(bTag,"register : $register")
+
     }
 
     override fun initData() {
         setOnClickListeners(text_main_container)
         refreshData()
+
     }
 
     override fun refreshData() {
-        mDisposable = HttpApi.instance.register("hahahaha123", "123123321321", "123123321321")
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                    Log.d(TAG,"it : $it")
-            }, {
-                Log.d(TAG,"it : $it")
-            })
+
     }
 
     override fun unInit() {
-        mDisposable?.dispose()
-        mDisposable = null
     }
 
     override fun getActivityContext(): Context? {

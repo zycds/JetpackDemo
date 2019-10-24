@@ -1,5 +1,6 @@
 package com.zhangyc.jetpackdemo.http
 
+import com.zhangyc.jetpackdemo.entities.Entities
 import io.reactivex.Observable
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -42,8 +43,8 @@ class HttpApi private constructor() {
             .build().create(Api::class.java)
     }
 
-    fun register(username : String, password : String, repassword : String) : Observable<Any> {
-        return api.register(username, password, repassword)
+    fun register(username : String, password : String, repassword : String) : Observable<Entities.User> {
+        return api.register(username, password, repassword).compose(RxHelper.handlerResult())
     }
 
 }

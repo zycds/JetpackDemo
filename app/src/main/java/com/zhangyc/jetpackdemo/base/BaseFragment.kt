@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.zhangyc.jetpackdemo.annotations.InjectPresenter
+import com.zhangyc.jetpackdemo.mvp.RegisterContact
 import com.zhangyc.jetpackdemo.proxy.ProxyActivity
 import com.zhangyc.jetpackdemo.proxy.ProxyFragment
 
 abstract class BaseFragment<P : IBasePresenter> : ProxyFragment() {
+
+    protected lateinit var bTag : String
+
 
     override fun onClick(p0: View?) {
         handlerClickListener(p0?.id)
@@ -25,6 +30,7 @@ abstract class BaseFragment<P : IBasePresenter> : ProxyFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        bTag = this::class.java.simpleName
         init()
     }
 

@@ -11,11 +11,11 @@ interface MainContact {
 
     class MainPresenter : IBasePresenter {
         override fun <V : IBaseView> attachView(v: V) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
         }
 
         override fun deAttachView() {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
         }
     }
 
