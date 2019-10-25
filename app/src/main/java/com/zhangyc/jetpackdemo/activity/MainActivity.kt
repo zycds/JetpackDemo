@@ -71,6 +71,7 @@ class MainActivity : BaseActivity<MainContact.MainPresenter>(), MainContact.Main
     }
 
     override fun getActivityContext(): Context? {
+
         return this
     }
 
