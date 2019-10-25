@@ -5,16 +5,16 @@ import com.zhangyc.jetpackdemo.base.IBaseView
 
 abstract class ProxyFragment : Fragment(), IBaseView {
 
-    lateinit var proxyPresenter: IProxyPresenter
+    private var proxyPresenter: IProxyPresenter? = null
     override fun onStart() {
         super.onStart()
         proxyPresenter = ProxyPresenterImpl()
-        proxyPresenter.bindPresenter(this)
+        proxyPresenter?.bindPresenter(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        proxyPresenter.unBindPresenter()
+        proxyPresenter?.unBindPresenter()
     }
 
 

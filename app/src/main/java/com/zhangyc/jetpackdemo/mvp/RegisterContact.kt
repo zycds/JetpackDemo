@@ -53,10 +53,13 @@ interface RegisterContact {
                 .subscribe({
                     Log.d(tag,"it : $it")
                     val bundle = Bundle()
-                    bundle.putString("username", it.username)
-                    bundle.putString("password", it.password)
-                    AppDataBase.getDBInstance().getUserDao().insert(Entities.User())
-                    NavHostFragment.findNavController(iBaseView.getCurrentFragment()).navigate(R.id.action_registerFragment_to_loginFragment, bundle)
+                    bundle.putString("username", iBaseView.getUserName())
+                    bundle.putString("password", iBaseView.getPassword())
+                    val user = Entities.User()
+                    user.username = iBaseView.getUserName()
+                    user.password = iBaseView.getPassword()
+                    AppDataBase.getDBInstance().getUserDao().insert(user)
+                    NavHostFragment.findNavController(iBaseView.getCurrentFragment()).navigate(R.id.action_registerFragment_to_mainFragment, bundle)
                 }, {
                     Log.d(tag, "it : $it")
                     iBaseView.getActivityContext()?.let { it1 -> ToastUtil.showShortToast(it1, "register fail, $it") }

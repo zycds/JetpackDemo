@@ -1,7 +1,9 @@
 package com.zhangyc.jetpackdemo.http
 
 import io.reactivex.*
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
+import io.reactivex.schedulers.Schedulers
 import java.lang.Exception
 
 class RxHelper {
@@ -17,7 +19,6 @@ class RxHelper {
                             if (t.errorCode == -1) return Observable.error(Throwable(t.errorMsg))
                             return createDataObservable(t.data)
                         }
-
                     })
                 }
             }

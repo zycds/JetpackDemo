@@ -47,4 +47,20 @@ class HttpApi private constructor() {
         return api.register(username, password, repassword).compose(RxHelper.handlerResult())
     }
 
+    fun login(username : String, password : String) : Observable<Entities.User> {
+        return api.login(username, password).compose(RxHelper.handlerResult())
+    }
+
+    fun getPubAddressLists() : Observable<List<Entities.PubAddress>> {
+        return api.getPubAddressLists().compose(RxHelper.handlerResult())
+    }
+
+    fun getPubAddressHistoryLists(id : Int, page : Int) : Observable<Entities.PublicAHistoryPage> {
+        return api.getPubAddressHistoryLists(id, page).compose(RxHelper.handlerResult())
+    }
+
+    fun getBanners() : Observable<List<Entities.Banner>> {
+        return api.getBanners().compose(RxHelper.handlerResult())
+    }
+
 }

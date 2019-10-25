@@ -20,7 +20,7 @@ abstract class BaseActivity<P : IBasePresenter> : ProxyActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             android.R.id.home->{
-                finish()
+                back()
             }
             R.id.action_bar_refresh->{
                 refreshData()
@@ -76,6 +76,8 @@ abstract class BaseActivity<P : IBasePresenter> : ProxyActivity() {
     protected abstract fun refreshData()
 
     protected abstract fun unInit()
+
+    protected abstract fun back() : Boolean
 
     open fun resume(){}
 

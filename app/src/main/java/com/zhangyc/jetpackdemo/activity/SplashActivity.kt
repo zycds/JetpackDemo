@@ -84,6 +84,10 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
 
     }
 
+    override fun back(): Boolean {
+        return true
+    }
+
     override fun getActivityContext(): Context {
         return this
     }
