@@ -1,16 +1,18 @@
 package com.zhangyc.jetpackdemo.base
 
 import android.os.Bundle
-import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ProgressBar
 import com.zhangyc.jetpackdemo.R
 import com.zhangyc.jetpackdemo.proxy.ProxyActivity
 
 abstract class BaseActivity<P : IBasePresenter> : ProxyActivity() {
 
     protected lateinit var tag : String
+
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -69,6 +71,17 @@ abstract class BaseActivity<P : IBasePresenter> : ProxyActivity() {
         unInit()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        return back()
+    }
+
+    override fun onBackPressed() {
+        if (onSupportNavigateUp()) {
+            return
+        }
+        super.onBackPressed()
+    }
+
     protected abstract fun init()
 
     protected abstract fun initData()
@@ -76,6 +89,12 @@ abstract class BaseActivity<P : IBasePresenter> : ProxyActivity() {
     protected abstract fun refreshData()
 
     protected abstract fun unInit()
+
+    override fun showLoadingDialog() {
+    }
+
+    override fun dismissLoadingDialog() {
+    }
 
     protected abstract fun back() : Boolean
 

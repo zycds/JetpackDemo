@@ -6,7 +6,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
@@ -19,7 +18,6 @@ import com.zhangyc.jetpackdemo.base.BaseFragment
 import com.zhangyc.jetpackdemo.entities.Entities
 import com.zhangyc.jetpackdemo.mvp.MainFragmentContact
 import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.android.synthetic.main.toolbar.*
 
 class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), MainFragmentContact.IMainFragmentView {
 
@@ -27,10 +25,6 @@ class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), 
     @InjectPresenter
     lateinit var mPresenter: MainFragmentContact.MainFragmentPresenter
 
-
-    override fun handlerClickListener(id: Int?) {
-        super.handlerClickListener(id)
-    }
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_main
@@ -56,6 +50,7 @@ class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), 
         return context
     }
 
+
     override fun getCurrentFragment(): Fragment {
         return this
     }
@@ -65,10 +60,11 @@ class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), 
         return viewPager_main
     }
 
-    override fun getRecyelerView(): RecyclerView {
+    override fun getRecyclerView(): RecyclerView {
         if (recyclerView_main.adapter == null) {
             recyclerView_main.layoutManager = LinearLayoutManager(getActivityContext())
-            recyclerView_main.addItemDecoration(DividerItemDecoration(getActivityContext(), DividerItemDecoration.VERTICAL))
+            val dividerItemDecoration = DividerItemDecoration(getActivityContext(), DividerItemDecoration.VERTICAL)
+            recyclerView_main.addItemDecoration(dividerItemDecoration)
             val pubAddressListAdapter = PubAddressListAdapter()
             pubAddressListAdapter.setOnRecyclerOnItemClickListener(object : BaseAdapter.OnItemClickListener<List<Entities.PubAddress>>{
                 override fun itemClick(position: Int, data: List<Entities.PubAddress>?) {
@@ -82,6 +78,14 @@ class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), 
         return recyclerView_main
     }
 
+    override fun showLoadingDialog() {
+        super.showLoadingDialog()
+        progressbar_loading.visibility = View.VISIBLE
+    }
 
+    override fun dismissLoadingDialog() {
+        super.dismissLoadingDialog()
+        progressbar_loading.visibility = View.GONE
+    }
 
 }

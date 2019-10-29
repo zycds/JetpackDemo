@@ -7,4 +7,8 @@ interface IBaseView : View.OnClickListener{
 
     fun getActivityContext() : Context?
 
+    fun showLoadingDialog()
+
+    fun dismissLoadingDialog()
+
 }

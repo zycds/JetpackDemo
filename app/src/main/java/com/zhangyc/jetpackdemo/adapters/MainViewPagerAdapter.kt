@@ -20,19 +20,19 @@ class MainViewPagerAdapter : PagerAdapter() {
     }
 
     override fun getCount(): Int {
-        return if (mBanners == null) 0 else mBanners?.size!!
+        return if (mBanners == null) 0 else Int.MAX_VALUE
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         var imageView = ImageView(App.instance.applicationContext)
         imageView.scaleType = ImageView.ScaleType.FIT_XY
-        Glide.with(App.instance.applicationContext).load(mBanners?.get(position)?.imagePath).into(imageView)
+        Glide.with(App.instance.applicationContext).load(mBanners?.get(position % (mBanners?.size!!))?.imagePath).into(imageView)
         container.addView(imageView)
         return imageView
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        super.destroyItem(container, position, `object`)
+//        super.destroyItem(container, position, `object`)
         container.removeView(`object` as View?)
     }
 

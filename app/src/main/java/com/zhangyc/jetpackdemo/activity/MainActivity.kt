@@ -10,7 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.zhangyc.jetpackdemo.R
 import com.zhangyc.jetpackdemo.annotations.InjectPresenter
 import com.zhangyc.jetpackdemo.base.BaseActivity
-import com.zhangyc.jetpackdemo.fragment.WebFragment
+import com.zhangyc.jetpackdemo.event.MsgEvent
+import com.zhangyc.jetpackdemo.event.RxBus
 import com.zhangyc.jetpackdemo.mvp.MainContact
 import com.zhangyc.jetpackdemo.utils.Lg
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,9 +22,6 @@ class MainActivity : BaseActivity<MainContact.MainPresenter>(), MainContact.Main
     @InjectPresenter
     lateinit var mPresenter : MainContact.MainPresenter
 
-    override fun handlerClickListener(id: Int?) {
-        super.handlerClickListener(id)
-    }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun init() {
@@ -53,25 +51,19 @@ class MainActivity : BaseActivity<MainContact.MainPresenter>(), MainContact.Main
     }
 
     override fun refreshData() {
-
+        RxBus.instance.post(MsgEvent(MsgEvent.REFRESH_DATA_FRAGMENT, main_container.findNavController().currentDestination?.label as String))
     }
+
 
     override fun unInit() {
 
     }
 
     override fun back(): Boolean {
-        Lg.debug(tag, "back.")
-
-
-        if (supportFragmentManager.findFragmentById(R.id.main_container) is WebFragment) {
-            Lg.debug(tag, "targetFragment is WebFragment.")
-        }
-        return true
+        return supportFragmentManager.findFragmentById(R.id.main_container)?.let { NavHostFragment.findNavController(it).navigateUp() }!!
     }
 
     override fun getActivityContext(): Context? {
-
         return this
     }
 

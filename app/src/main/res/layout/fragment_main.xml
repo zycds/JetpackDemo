@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <androidx.viewpager.widget.ViewPager
-            android:id="@+id/viewPager_main"
-            android:layout_width="match_parent"
-            android:layout_height="160dp"/>
+    <LinearLayout
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_main"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+        <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewPager_main"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"/>
 
-</LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <include
+            android:id="@+id/progressbar_loading"
+            layout="@layout/progressbar_loading"/>
+
+</RelativeLayout>

@@ -1,27 +1,28 @@
 package com.zhangyc.jetpackdemo.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
-import com.zhangyc.jetpackdemo.App
 import com.zhangyc.jetpackdemo.R
 import com.zhangyc.jetpackdemo.annotations.InjectPresenter
 import com.zhangyc.jetpackdemo.base.BaseActivity
+import com.zhangyc.jetpackdemo.entities.Entities
+import com.zhangyc.jetpackdemo.event.RxTimer
 import com.zhangyc.jetpackdemo.mvp.SplashContact
 import com.zhangyc.jetpackdemo.room.AppDataBase
 import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.jetpackdemo.viewmodel.TestViewModel
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_splash.*
+import java.util.concurrent.TimeUnit
 
 class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashContact.ISplashView {
 
@@ -44,7 +45,6 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
     }
 
     override fun initData() {
-        getImageView().setImageResource(R.mipmap.splash)
         mPresenter.getNewSplashImage()
 
         val get = ViewModelProviders.of(this).get(TestViewModel::class.java)
@@ -54,9 +54,6 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
 
         get.password = ""
 
-
-
-
     }
 
     override fun refreshData() {
@@ -65,19 +62,26 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
 
     override fun resume() {
         super.resume()
-        (application as App).getMainHandler().postDelayed({
+        initSplash()
+    }
+
+    @SuppressLint("CheckResult")
+    private fun initSplash(){
+        val intent = Intent(this, MainActivity::class.java)
+        RxTimer.instance.timerDelay(this, Observable.create<Entities.User>{
             val userDao = AppDataBase.getDBInstance().getUserDao()
             val allUsers = userDao.getAllUsers()
-            for(user in allUsers) {
+            for (user in allUsers) {
                 Lg.info(tag, "user : ${user.username}")
             }
-            val intent = Intent(this, MainActivity::class.java)
-            if (allUsers.size > 0) {
-                intent.putExtra("username", allUsers[0].username)
-                intent.putExtra("password", allUsers[0].password)
-            }
+            if (allUsers.size > 0) it.onNext(allUsers[0]) else  it.onError(Throwable("please register..."))
+        }, 3, TimeUnit.SECONDS).subscribe({
+            intent.putExtra("username", it.username)
+            intent.putExtra("password", it.password)
             startActivity(intent)
-        }, 3000)
+        }, {
+            startActivity(intent)
+        })
     }
 
     override fun unInit() {
