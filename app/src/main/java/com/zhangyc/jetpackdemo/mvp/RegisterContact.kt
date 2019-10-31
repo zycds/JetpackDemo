@@ -70,6 +70,10 @@ interface RegisterContact {
             return TextUtils.isEmpty(iBaseView.getUserName()) || TextUtils.isEmpty(iBaseView.getPassword()) || TextUtils.isEmpty(iBaseView.getRePassword())
         }
 
+        override fun requestFinish(success: Boolean) {
+
+        }
+
     }
 
 }

@@ -41,6 +41,10 @@ interface HistoryContact {
                     ToastUtil.showShortToast(iHistoryView?.getActivityContext()!!, "it : $it")
                 })
         }
+
+        override fun requestFinish(success: Boolean) {
+
+        }
     }
 
 

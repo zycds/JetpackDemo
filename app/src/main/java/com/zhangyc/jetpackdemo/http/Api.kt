@@ -16,6 +16,9 @@ interface Api {
     @POST("/user/login")
     fun login(@Field("username")username: String, @Field("password")password: String) : Observable<BaseData<Entities.User>>
 
+    @GET("/user/logout/json")
+    fun logout() : Observable<BaseData<Any?>>
+
     @GET("/wxarticle/chapters/json")
     fun getPubAddressLists() : Observable<BaseData<List<Entities.PubAddress>>>
 

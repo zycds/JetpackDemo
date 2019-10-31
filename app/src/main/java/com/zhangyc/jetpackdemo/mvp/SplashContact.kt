@@ -28,6 +28,10 @@ interface SplashContact {
             }, 3000)
         }
 
+        override fun requestFinish(success: Boolean) {
+
+        }
+
     }
 
 }

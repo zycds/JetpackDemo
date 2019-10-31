@@ -1,19 +1,15 @@
 package com.zhangyc.jetpackdemo.fragment
 
 import android.content.Context
-import android.content.Intent
-import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import com.zhangyc.jetpackdemo.R
-import com.zhangyc.jetpackdemo.activity.SplashActivity
 import com.zhangyc.jetpackdemo.annotations.InjectPresenter
 import com.zhangyc.jetpackdemo.base.BaseFragment
 import com.zhangyc.jetpackdemo.mvp.LoginContact
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.edit_password
 import kotlinx.android.synthetic.main.fragment_login.edit_username
-import kotlinx.android.synthetic.main.fragment_register.*
 
 class LoginFragment : BaseFragment<LoginContact.LoginPresenter>(), LoginContact.ILoginView{
 

@@ -51,6 +51,10 @@ class HttpApi private constructor() {
         return api.login(username, password).compose(RxHelper.handlerResult())
     }
 
+    fun logout() : Observable<Any?>{
+        return api.logout().compose(RxHelper.handlerResult())
+    }
+
     fun getPubAddressLists() : Observable<List<Entities.PubAddress>> {
         return api.getPubAddressLists().compose(RxHelper.handlerResult())
     }

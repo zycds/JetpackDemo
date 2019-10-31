@@ -1,11 +1,14 @@
 package com.zhangyc.jetpackdemo.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import com.zhangyc.jetpackdemo.R
+import com.zhangyc.jetpackdemo.activity.WebViewActivity
+import com.zhangyc.jetpackdemo.http.HttpApi
 import com.zhangyc.jetpackdemo.proxy.ProxyActivity
 
 abstract class BaseActivity<P : IBasePresenter> : ProxyActivity() {
@@ -28,7 +31,8 @@ abstract class BaseActivity<P : IBasePresenter> : ProxyActivity() {
                 refreshData()
             }
             R.id.action_bar_more->{
-
+//                HttpApi.instance.logout()
+                startActivity(Intent(this, WebViewActivity::class.java))
             }
         }
         return true

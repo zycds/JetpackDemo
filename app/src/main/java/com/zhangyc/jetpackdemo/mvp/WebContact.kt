@@ -19,6 +19,10 @@ interface WebContact {
 
         }
 
+        override fun requestFinish(success: Boolean) {
+
+        }
+
     }
 
 }

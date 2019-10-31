@@ -46,6 +46,10 @@ interface LoginContact {
                 })
         }
 
+        override fun requestFinish(success: Boolean) {
+
+        }
+
     }
 
 }

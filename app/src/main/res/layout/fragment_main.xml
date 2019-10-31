@@ -3,19 +3,27 @@
                 android:layout_height="match_parent">
 
     <LinearLayout
-                  android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPager_main"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_main"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefreshLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     </LinearLayout>
 

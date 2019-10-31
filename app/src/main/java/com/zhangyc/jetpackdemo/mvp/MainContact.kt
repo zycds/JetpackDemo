@@ -10,6 +10,10 @@ interface MainContact {
     }
 
     class MainPresenter : IBasePresenter {
+        override fun requestFinish(success: Boolean) {
+
+        }
+
         override fun <V : IBaseView> attachView(v: V) {
 
         }
