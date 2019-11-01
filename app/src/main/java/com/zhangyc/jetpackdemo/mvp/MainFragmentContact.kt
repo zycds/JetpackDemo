@@ -4,22 +4,20 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager.widget.ViewPager
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import com.zhangyc.jetpackdemo.App
 import com.zhangyc.jetpackdemo.activity.MainActivity
 import com.zhangyc.jetpackdemo.adapters.MainViewPagerAdapter
 import com.zhangyc.jetpackdemo.adapters.PubAddressListAdapter
-import com.zhangyc.jetpackdemo.base.IBasePresenter
-import com.zhangyc.jetpackdemo.base.IBaseView
 import com.zhangyc.jetpackdemo.entities.Entities
-import com.zhangyc.jetpackdemo.event.RxTimer
 import com.zhangyc.jetpackdemo.fragment.MainFragment
 import com.zhangyc.jetpackdemo.http.HttpApi
+import com.zhangyc.jetpackdemo.http.RxHelper
 import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.jetpackdemo.utils.ToastUtil
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.zhangyc.library.event.RxTimer
+import com.zhangyc.library.mvp.IBasePresenter
+import com.zhangyc.library.mvp.IBaseView
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 interface MainFragmentContact {
@@ -38,6 +36,7 @@ interface MainFragmentContact {
     class MainFragmentPresenter : IBasePresenter {
 
         private lateinit var iMainView : IMainFragmentView
+        private var mStopTimer = false
 
         private var mSubscribe : Disposable? = null
         private var mSubscribe2 : Disposable? = null
@@ -49,10 +48,11 @@ interface MainFragmentContact {
         }
 
         override fun deAttachView() {
+            mStopTimer = true
             Lg.debug(tag, "deAttachView....")
+            if (mTimerDisposable?.isDisposed!!)mTimerDisposable?.dispose()
             if (mSubscribe?.isDisposed!!)mSubscribe?.dispose()
             if (mSubscribe2?.isDisposed!!) mSubscribe2?.dispose()
-            if (mTimerDisposable?.isDisposed!!)mTimerDisposable?.dispose()
             mSubscribe = null
             mSubscribe2 = null
             mTimerDisposable = null
@@ -60,9 +60,8 @@ interface MainFragmentContact {
 
 
         fun requestBanners(){
+            Lg.debug(tag, "requestBanners...")
             mSubscribe = HttpApi.instance.getBanners()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     val mutableList = it as MutableList<Entities.Banner>
                     (iMainView.getViewPager().adapter as MainViewPagerAdapter).setData(mutableList)
@@ -70,10 +69,15 @@ interface MainFragmentContact {
                         (iMainView as MainFragment).activity as MainActivity,
                         2,
                         TimeUnit.SECONDS,
-                        Long.MAX_VALUE
-                    )
+                        Long.MAX_VALUE )
+                        .compose(RxHelper.handlerResultIO())
+                        .takeWhile {
+                            Lg.debug(tag, "stop timer : $mStopTimer")
+                            !mStopTimer
+                        }
                         .subscribe {
-                            iMainView.getViewPager().currentItem++
+                            Lg.debug(tag, "currentItem : ${iMainView.getViewPager().currentItem}")
+                            iMainView.getViewPager().currentItem ++
                         }
                 }, {
                     ToastUtil.showShortToast(App.instance.applicationContext, "it : $it")
@@ -84,8 +88,6 @@ interface MainFragmentContact {
         fun requestPublicAddressList() {
             iMainView.showLoadingDialog()
             mSubscribe2 = HttpApi.instance.getPubAddressLists()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     (iMainView.getRecyclerView().adapter as PubAddressListAdapter).setData(it)
                     requestFinish(true)

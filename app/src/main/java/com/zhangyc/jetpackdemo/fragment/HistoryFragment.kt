@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zhangyc.jetpackdemo.R
 import com.zhangyc.jetpackdemo.adapters.HistoryAdapter
-import com.zhangyc.jetpackdemo.annotations.InjectPresenter
-import com.zhangyc.jetpackdemo.base.BaseAdapter
-import com.zhangyc.jetpackdemo.base.BaseFragment
+import com.zhangyc.library.annotations.InjectPresenter
+import com.zhangyc.library.base.BaseAdapter
 import com.zhangyc.jetpackdemo.entities.Entities
 import com.zhangyc.jetpackdemo.mvp.HistoryContact
+import com.zhangyc.library.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_history.*
 
 class HistoryFragment : BaseFragment<HistoryContact.HistoryPresenter>() , HistoryContact.IHistoryView {

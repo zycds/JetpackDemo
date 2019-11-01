@@ -13,12 +13,12 @@ import androidx.viewpager.widget.ViewPager
 import com.zhangyc.jetpackdemo.R
 import com.zhangyc.jetpackdemo.adapters.MainViewPagerAdapter
 import com.zhangyc.jetpackdemo.adapters.PubAddressListAdapter
-import com.zhangyc.jetpackdemo.annotations.InjectPresenter
-import com.zhangyc.jetpackdemo.base.BaseAdapter
-import com.zhangyc.jetpackdemo.base.BaseFragment
+import com.zhangyc.library.annotations.InjectPresenter
+import com.zhangyc.library.base.BaseAdapter
 import com.zhangyc.jetpackdemo.entities.Entities
 import com.zhangyc.jetpackdemo.mvp.MainFragmentContact
 import com.zhangyc.jetpackdemo.utils.Lg
+import com.zhangyc.library.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), MainFragmentContact.IMainFragmentView, SwipeRefreshLayout.OnRefreshListener {

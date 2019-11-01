@@ -1,21 +1,11 @@
 package com.zhangyc.jetpackdemo.fragment
 
 import android.content.Context
-import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
 import com.zhangyc.jetpackdemo.R
-import com.zhangyc.jetpackdemo.annotations.InjectPresenter
-import com.zhangyc.jetpackdemo.base.BaseFragment
-import com.zhangyc.jetpackdemo.http.HttpApi
+import com.zhangyc.library.annotations.InjectPresenter
 import com.zhangyc.jetpackdemo.mvp.RegisterContact
-import com.zhangyc.jetpackdemo.utils.ToastUtil
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import com.zhangyc.library.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_register.*
 
 class RegisterFragment : BaseFragment<RegisterContact.RegisterPresenter>(), RegisterContact.IRegisterView {

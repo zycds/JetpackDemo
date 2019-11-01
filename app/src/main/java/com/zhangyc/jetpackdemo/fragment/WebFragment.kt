@@ -4,8 +4,8 @@ import android.content.Context
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.zhangyc.jetpackdemo.R
-import com.zhangyc.jetpackdemo.base.BaseFragment
 import com.zhangyc.jetpackdemo.mvp.WebContact
+import com.zhangyc.library.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_web.*
 
 class WebFragment : BaseFragment<WebContact.WebPresenter>(), WebContact.IWebView {

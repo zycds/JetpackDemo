@@ -8,12 +8,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.zhangyc.jetpackdemo.R
-import com.zhangyc.jetpackdemo.annotations.InjectPresenter
-import com.zhangyc.jetpackdemo.base.BaseActivity
-import com.zhangyc.jetpackdemo.event.MsgEvent
-import com.zhangyc.jetpackdemo.event.RxBus
+import com.zhangyc.library.annotations.InjectPresenter
 import com.zhangyc.jetpackdemo.mvp.MainContact
 import com.zhangyc.jetpackdemo.utils.Lg
+import com.zhangyc.library.base.BaseActivity
+import com.zhangyc.library.event.MsgEvent
+import com.zhangyc.library.event.RxBus
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 

@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.os.Environment
 import androidx.core.view.size
 import com.tencent.smtt.sdk.TbsReaderView
-import com.zhangyc.jetpackdemo.base.IBasePresenter
-import com.zhangyc.jetpackdemo.base.IBaseView
 import com.zhangyc.jetpackdemo.utils.Lg
+import com.zhangyc.library.mvp.IBasePresenter
+import com.zhangyc.library.mvp.IBaseView
 import java.io.File
 
 interface X5WebViewContact {

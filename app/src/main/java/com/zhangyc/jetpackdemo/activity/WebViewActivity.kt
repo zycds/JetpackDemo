@@ -3,9 +3,9 @@ package com.zhangyc.jetpackdemo.activity
 import android.content.Context
 import android.webkit.WebView
 import com.zhangyc.jetpackdemo.R
-import com.zhangyc.jetpackdemo.annotations.InjectPresenter
-import com.zhangyc.jetpackdemo.base.BaseActivity
+import com.zhangyc.library.annotations.InjectPresenter
 import com.zhangyc.jetpackdemo.mvp.WebActivityContact
+import com.zhangyc.library.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_webview.*
 
 class WebViewActivity : BaseActivity<WebActivityContact.WebPresenter>(), WebActivityContact.IWebActivityView {
@@ -37,9 +37,5 @@ class WebViewActivity : BaseActivity<WebActivityContact.WebPresenter>(), WebActi
 
     override fun getWebView(): WebView {
         return webView2
-    }
-
-    override fun getTenCentWebView(): com.tencent.smtt.sdk.WebView {
-        return webView
     }
 }

@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.zhangyc.jetpackdemo.App
 import com.zhangyc.jetpackdemo.R
-import com.zhangyc.jetpackdemo.base.BaseAdapter
-import com.zhangyc.jetpackdemo.base.BaseViewHolder
+import com.zhangyc.library.base.BaseAdapter
 import com.zhangyc.jetpackdemo.entities.Entities
+import com.zhangyc.library.base.BaseViewHolder
 import kotlinx.android.synthetic.main.item_public_address.view.*
 
 class PubAddressListAdapter : BaseAdapter<PubAddressListAdapter.ViewHolder, List<Entities.PubAddress>>() {

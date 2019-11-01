@@ -1,14 +1,14 @@
 package com.zhangyc.jetpackdemo
 
-import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import com.tencent.smtt.sdk.QbSdk
-import com.zhangyc.jetpackdemo.utils.AppUtil
+import com.zhangyc.library.utils.AppUtil
 import com.zhangyc.jetpackdemo.utils.Lg
+import com.zhangyc.library.base.BaseApp
 import kotlin.properties.Delegates
 
-class App : Application(){
+class App : BaseApp(){
 
     private lateinit var mHandler : Handler
 

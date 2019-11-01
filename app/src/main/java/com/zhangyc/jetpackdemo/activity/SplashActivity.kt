@@ -12,14 +12,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.zhangyc.jetpackdemo.R
-import com.zhangyc.jetpackdemo.annotations.InjectPresenter
-import com.zhangyc.jetpackdemo.base.BaseActivity
+import com.zhangyc.library.annotations.InjectPresenter
 import com.zhangyc.jetpackdemo.entities.Entities
-import com.zhangyc.jetpackdemo.event.RxTimer
 import com.zhangyc.jetpackdemo.mvp.SplashContact
 import com.zhangyc.jetpackdemo.room.AppDataBase
 import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.jetpackdemo.viewmodel.TestViewModel
+import com.zhangyc.library.base.BaseActivity
+import com.zhangyc.library.event.RxTimer
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_splash.*
 import java.util.concurrent.TimeUnit

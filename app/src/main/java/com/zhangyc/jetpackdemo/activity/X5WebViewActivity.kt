@@ -4,9 +4,9 @@ import android.content.Context
 import android.widget.LinearLayout
 import com.tencent.smtt.sdk.TbsReaderView
 import com.zhangyc.jetpackdemo.R
-import com.zhangyc.jetpackdemo.annotations.InjectPresenter
-import com.zhangyc.jetpackdemo.base.BaseActivity
+import com.zhangyc.library.annotations.InjectPresenter
 import com.zhangyc.jetpackdemo.mvp.X5WebViewContact
+import com.zhangyc.library.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_x5.*
 import java.io.File
 

@@ -44,27 +44,27 @@ class HttpApi private constructor() {
     }
 
     fun register(username : String, password : String, repassword : String) : Observable<Entities.User> {
-        return api.register(username, password, repassword).compose(RxHelper.handlerResult())
+        return api.register(username, password, repassword).compose(RxHelper.handlerResult()).compose(RxHelper.handlerResultIO())
     }
 
     fun login(username : String, password : String) : Observable<Entities.User> {
-        return api.login(username, password).compose(RxHelper.handlerResult())
+        return api.login(username, password).compose(RxHelper.handlerResult()).compose(RxHelper.handlerResultIO())
     }
 
     fun logout() : Observable<Any?>{
-        return api.logout().compose(RxHelper.handlerResult())
+        return api.logout().compose(RxHelper.handlerResult()).compose(RxHelper.handlerResultIO())
     }
 
     fun getPubAddressLists() : Observable<List<Entities.PubAddress>> {
-        return api.getPubAddressLists().compose(RxHelper.handlerResult())
+        return api.getPubAddressLists().compose(RxHelper.handlerResult()).compose(RxHelper.handlerResultIO())
     }
 
     fun getPubAddressHistoryLists(id : Int, page : Int) : Observable<Entities.PublicAHistoryPage> {
-        return api.getPubAddressHistoryLists(id, page).compose(RxHelper.handlerResult())
+        return api.getPubAddressHistoryLists(id, page).compose(RxHelper.handlerResult()).compose(RxHelper.handlerResultIO())
     }
 
     fun getBanners() : Observable<List<Entities.Banner>> {
-        return api.getBanners().compose(RxHelper.handlerResult())
+        return api.getBanners().compose(RxHelper.handlerResult()).compose(RxHelper.handlerResultIO())
     }
 
 }

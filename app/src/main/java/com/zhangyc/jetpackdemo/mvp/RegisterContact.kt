@@ -6,16 +6,13 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import com.zhangyc.jetpackdemo.R
-import com.zhangyc.jetpackdemo.base.IBasePresenter
-import com.zhangyc.jetpackdemo.base.IBaseView
 import com.zhangyc.jetpackdemo.entities.Entities
-import com.zhangyc.jetpackdemo.fragment.MainFragment
 import com.zhangyc.jetpackdemo.http.HttpApi
 import com.zhangyc.jetpackdemo.room.AppDataBase
 import com.zhangyc.jetpackdemo.utils.ToastUtil
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.zhangyc.library.mvp.IBasePresenter
+import com.zhangyc.library.mvp.IBaseView
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 
 interface RegisterContact {
 
@@ -48,8 +45,6 @@ interface RegisterContact {
         fun register() {
             if (check()) return
             mDisposable = HttpApi.instance.register(iBaseView.getUserName()!!, iBaseView.getPassword()!!, iBaseView.getRePassword()!!)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Log.d(tag,"it : $it")
                     val bundle = Bundle()

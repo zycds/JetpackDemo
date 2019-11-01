@@ -2,8 +2,8 @@ package com.zhangyc.jetpackdemo.mvp
 
 import android.util.Log
 import android.widget.ImageView
-import com.zhangyc.jetpackdemo.base.IBasePresenter
-import com.zhangyc.jetpackdemo.base.IBaseView
+import com.zhangyc.library.mvp.IBasePresenter
+import com.zhangyc.library.mvp.IBaseView
 
 interface SplashContact {
 
@@ -11,7 +11,7 @@ interface SplashContact {
         fun getImageView() : ImageView
     }
 
-    class SplashPresenter : IBasePresenter{
+    class SplashPresenter : IBasePresenter {
         private val tag  = SplashPresenter::class.java.simpleName
         private var splashView : ISplashView? = null
         override fun <V : IBaseView> attachView(v: V) {

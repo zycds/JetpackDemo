@@ -2,13 +2,11 @@ package com.zhangyc.jetpackdemo.mvp
 
 import androidx.recyclerview.widget.RecyclerView
 import com.zhangyc.jetpackdemo.adapters.HistoryAdapter
-import com.zhangyc.jetpackdemo.base.IBasePresenter
-import com.zhangyc.jetpackdemo.base.IBaseView
 import com.zhangyc.jetpackdemo.http.HttpApi
 import com.zhangyc.jetpackdemo.utils.ToastUtil
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.zhangyc.library.mvp.IBasePresenter
+import com.zhangyc.library.mvp.IBaseView
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 
 interface HistoryContact {
 
@@ -33,8 +31,6 @@ interface HistoryContact {
 
         fun getPublicAddressList(id : Int) {
             mDisposable = HttpApi.instance.getPubAddressHistoryLists(id, 1)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     it.datas?.let { it1 -> (iHistoryView?.getRecyclerView()?.adapter as HistoryAdapter).setData(it1) }
                 }, {
