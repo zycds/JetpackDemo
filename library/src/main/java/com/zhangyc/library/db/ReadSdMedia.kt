@@ -6,6 +6,7 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import androidx.annotation.RequiresApi
 import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.library.base.BaseApp
 import com.zhangyc.library.event.MsgEvent
@@ -13,7 +14,6 @@ import com.zhangyc.library.event.RxBus
 import com.zhangyc.library.receiver.ScanSdReceiver
 import com.zhangyc.library.utils.SdcardUtil
 
-@Suppress("UNCHECKED_CAST")
 class ReadSdMedia {
 
     companion object {
@@ -40,27 +40,35 @@ class ReadSdMedia {
         val scanSdReceiver = ScanSdReceiver()
         val intentFilter = IntentFilter()
         intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_STARTED)
-        intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_STARTED)
+        intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED)
         BaseApp.instance.registerReceiver(scanSdReceiver, intentFilter)
     }
 
-    fun <D : Media> getSdcardMediaLists() : MutableList<D> {
+    inline fun <reified D : Media> getSdcardMediaLists() : MutableList<D> {
         val mutableListOf = mutableListOf<D>()
         val query = BaseApp.instance.contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
             arrayOf(
                 MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.SIZE, MediaStore.Audio.Media.DATE_MODIFIED,
                 MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DISPLAY_NAME
             ), null, null, null
         )
-        val moveToNext = query?.moveToNext()
-        while (moveToNext!!) {
-            val title = query.getString(query.getColumnIndex(MediaStore.Audio.Media.TITLE))
-            val artist = query.getString(query.getColumnIndex(MediaStore.Audio.Media.ARTIST))
-            val id = query.getInt(query.getColumnIndex(MediaStore.Audio.Media._ID))
-            val displayName = query.getString(query.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))
-            val media = Media(id, title, artist, displayName)
-            mutableListOf.add(media as D )
+        try {
+            while ((query?.moveToNext())!!) {
+                val title = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE))
+                val artist = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST))
+                val id = query.getInt(query.getColumnIndexOrThrow(MediaStore.Audio.Media._ID))
+                val displayName : String? = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME))
+                val size = query.getLong(query.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE))
+                val dateModify = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DATE_MODIFIED))
+                val media = Media(id, title, artist, displayName, size, dateModify)
+                if (media is D) mutableListOf.add(media)
+            }
+        } catch (e : Exception) {
+            Lg.debug(tag, "exception : $e")
+        } finally {
+            query?.close()
         }
         return mutableListOf
     }

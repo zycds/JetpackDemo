@@ -5,6 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.zhangyc.jetpackdemo.utils.Lg
+import com.zhangyc.library.event.MsgEvent
+import com.zhangyc.library.event.RxBus
+import com.zhangyc.library.event.RxHelper
 import com.zhangyc.library.mvp.IBasePresenter
 import com.zhangyc.library.proxy.ProxyFragment
 import io.reactivex.disposables.Disposable
@@ -32,7 +36,7 @@ abstract class BaseFragment<P : IBasePresenter> : ProxyFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bTag = this::class.java.simpleName
-        /*subscribe = RxBus.instance.toObservable(this, MsgEvent::class.java)
+        subscribe = RxBus.instance.toObservable(this, MsgEvent::class.java)
             .filter(object : io.reactivex.functions.Predicate<MsgEvent> {
                 override fun test(t: MsgEvent): Boolean {
                     if (t.code == MsgEvent.REFRESH_DATA_FRAGMENT && bTag == t.msg) {
@@ -41,10 +45,10 @@ abstract class BaseFragment<P : IBasePresenter> : ProxyFragment() {
                     }
                     return false
                 }
-            }).subscribe {
+            }).compose(RxHelper.handlerResultIO()).subscribe {
             Lg.debug(bTag, "refreshData : ${it.msg}")
             refreshData()
-        }*/
+        }
         init()
     }
 
@@ -59,7 +63,7 @@ abstract class BaseFragment<P : IBasePresenter> : ProxyFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (subscribe.isDisposed) subscribe.dispose()
+        if (subscribe?.isDisposed) subscribe.dispose()
         unInit()
     }
 

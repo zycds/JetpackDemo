@@ -1,5 +1,6 @@
-package com.zhangyc.jetpackdemo.http
+package com.zhangyc.library.event
 
+import com.zhangyc.library.base.BaseData
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
