@@ -20,10 +20,12 @@ import kotlinx.android.synthetic.main.activity_media.*
 
 class MediaActivity : BaseActivity<MediaContact.MediaPresenter>(), MediaContact.IMediaView {
 
+
+
     @SuppressLint("CheckResult")
     override fun init() {
         setContentView(R.layout.activity_media)
-        Lg.debug("sendScanSdcardReceive", "isExistSdcard :  ${SdcardUtil.instance.isExistSdcard()}")
+        Lg.debug(tag, "isExistSdcard :  ${SdcardUtil.instance.isExistSdcard()}")
         RxBus.instance.toObservable(this, MsgEvent::class.java)
             .subscribe({
                 val musicLists = ReadSdMedia.instance.getSdcardMediaLists<Music>()
