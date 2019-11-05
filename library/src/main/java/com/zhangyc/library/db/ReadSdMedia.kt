@@ -62,7 +62,6 @@ class ReadSdMedia {
             val media = Media(id, title, artist, displayName)
             mutableListOf.add(media as D )
         }
-        Lg.debug(tag, "size : ${mutableListOf.size}")
         return mutableListOf
     }
 
