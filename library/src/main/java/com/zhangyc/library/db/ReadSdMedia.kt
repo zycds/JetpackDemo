@@ -18,15 +18,17 @@ class ReadSdMedia {
 
     companion object {
         val instance: ReadSdMedia by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { ReadSdMedia() }
+
+        val tag = ReadSdMedia::class.java.simpleName
     }
 
     fun sendScanSdcardReceiver() {
-        Lg.debug("sendScanSdcardReceive", "isExistSdcard :  ${SdcardUtil.instance.isExistSdcard()}")
-        Lg.debug("sendScanSdcardReceive", "sdcard path : ${SdcardUtil.instance.getSdcardPath()}")
+        Lg.debug(tag, "isExistSdcard :  ${SdcardUtil.instance.isExistSdcard()}")
+        Lg.debug(tag, "sdcard path : ${SdcardUtil.instance.getSdcardPath()}")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             MediaScannerConnection.scanFile(BaseApp.instance, arrayOf(SdcardUtil.instance.getSdcardPath().toString()), null
             ) { p0, p1 ->
-                Lg.debug("sendScanSdcardReceive", "p0 : $p0, p1 : $p1")
+                Lg.debug(tag, "p0 : $p0, p1 : $p1")
                 RxBus.instance.post(MsgEvent(ScanSdReceiver.ACTION_MEDIA_SCANNER_FINISHED, "MediaScannerConnection scanFile."))
             }
         } else {
