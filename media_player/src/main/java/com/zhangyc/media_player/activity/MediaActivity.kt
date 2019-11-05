@@ -8,6 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.blankj.utilcode.util.BarUtils
+import com.blankj.utilcode.util.DeviceUtils
+import com.blankj.utilcode.util.FragmentUtils
+import com.blankj.utilcode.util.ProcessUtils
 import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.library.base.BaseActivity
 import com.zhangyc.library.base.BaseApp
@@ -54,7 +58,7 @@ class MediaActivity : BaseActivity<MediaContact.MediaPresenter>(), MediaContact.
     }
 
     override fun initData() {
-
+        Lg.debug(tag, "bar height : ${BarUtils.getActionBarHeight()}")
     }
 
     override fun refreshData() {
