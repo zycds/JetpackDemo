@@ -1,6 +1,7 @@
 package com.zhangyc.jetpackdemo.http
 
 import com.zhangyc.jetpackdemo.entities.Entities
+import com.zhangyc.library.base.BaseData
 import io.reactivex.Observable
 import retrofit2.http.*
 

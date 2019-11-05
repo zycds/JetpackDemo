@@ -1,6 +1,8 @@
 package com.zhangyc.jetpackdemo.http
 
+import com.zhangyc.jetpackdemo.Constants
 import com.zhangyc.jetpackdemo.entities.Entities
+import com.zhangyc.library.event.RxHelper
 import io.reactivex.Observable
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -22,8 +24,8 @@ class HttpApi private constructor() {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         val okHttpClient = OkHttpClient.Builder()
-            .readTimeout(15, TimeUnit.SECONDS)
-            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(Constants.READ_TIME_OUT, TimeUnit.SECONDS)
+            .connectTimeout(Constants.CONNECT_TIME_OUT, TimeUnit.SECONDS)
             .addNetworkInterceptor(object : Interceptor{
                 override fun intercept(chain: Interceptor.Chain): Response {
                     val request = chain.request()

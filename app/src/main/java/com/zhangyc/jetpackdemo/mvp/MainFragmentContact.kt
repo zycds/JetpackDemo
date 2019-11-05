@@ -11,7 +11,6 @@ import com.zhangyc.jetpackdemo.adapters.PubAddressListAdapter
 import com.zhangyc.jetpackdemo.entities.Entities
 import com.zhangyc.jetpackdemo.fragment.MainFragment
 import com.zhangyc.jetpackdemo.http.HttpApi
-import com.zhangyc.jetpackdemo.http.RxHelper
 import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.jetpackdemo.utils.ToastUtil
 import com.zhangyc.library.event.RxTimer
