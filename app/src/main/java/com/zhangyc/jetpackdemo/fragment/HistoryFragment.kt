@@ -48,10 +48,10 @@ class HistoryFragment : BaseFragment<HistoryContact.HistoryPresenter>() , Histor
             recyclerView_history.layoutManager = LinearLayoutManager(getActivityContext())
             recyclerView_history.addItemDecoration(DividerItemDecoration(getActivityContext(), DividerItemDecoration.VERTICAL))
             val historyAdapter = HistoryAdapter()
-            historyAdapter.setOnRecyclerOnItemClickListener(object : BaseAdapter.OnItemClickListener<List<Entities.PublicAHistory>>{
-                override fun itemClick(position: Int, data: List<Entities.PublicAHistory>?) {
+            historyAdapter.setOnRecyclerOnItemClickListener(object : BaseAdapter.OnItemClickListener<Entities.PublicAHistory>{
+                override fun itemClick(position: Int, data: Entities.PublicAHistory?) {
                     val bundle = Bundle()
-                    bundle.putString("url", data?.get(position)?.link)
+                    bundle.putString("url", data?.link)
                     NavHostFragment.findNavController(this@HistoryFragment).navigate(R.id.action_historyFragment_to_webFragment, bundle)
                 }
             })

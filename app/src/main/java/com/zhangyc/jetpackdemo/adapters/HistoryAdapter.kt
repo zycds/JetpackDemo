@@ -10,7 +10,7 @@ import com.zhangyc.jetpackdemo.entities.Entities
 import com.zhangyc.library.base.BaseViewHolder
 import kotlinx.android.synthetic.main.item_history.view.*
 
-class HistoryAdapter : BaseAdapter<HistoryAdapter.ViewHolder, List<Entities.PublicAHistory>>() {
+class HistoryAdapter : BaseAdapter<HistoryAdapter.ViewHolder, Entities.PublicAHistory>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(App.instance.applicationContext).inflate(R.layout.item_history, parent, false)

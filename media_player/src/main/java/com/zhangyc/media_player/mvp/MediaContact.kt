@@ -1,25 +1,33 @@
 package com.zhangyc.media_player.mvp
 
-import androidx.recyclerview.widget.RecyclerView
 import com.zhangyc.library.mvp.IBasePresenter
 import com.zhangyc.library.mvp.IBaseView
 
 interface MediaContact {
 
-    interface IMediaView : IBaseView {
-        fun getRecyclerView() : RecyclerView
+    companion object {
+        val tag = MediaContact::class.java.simpleName
     }
 
-    class MediaPresenter : IBasePresenter {
-        override fun <V : IBaseView> attachView(v: V) {
+    interface IMediaView : IBaseView
 
+    class MediaPresenter : IBasePresenter {
+
+        private var mMediaView: IMediaView? = null
+
+
+
+        override fun <V : IBaseView> attachView(v: V) {
+            mMediaView = v as IMediaView
         }
 
         override fun deAttachView() {
+
         }
 
         override fun requestFinish(success: Boolean) {
         }
+
 
     }
 

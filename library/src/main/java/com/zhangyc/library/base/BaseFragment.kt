@@ -16,7 +16,7 @@ import io.reactivex.disposables.Disposable
 abstract class BaseFragment<P : IBasePresenter> : ProxyFragment() {
     lateinit var bTag : String
 
-    private lateinit var subscribe : Disposable
+    private var subscribe : Disposable? = null
 
     override fun onClick(p0: View?) {
         handlerClickListener(p0?.id)
@@ -63,7 +63,7 @@ abstract class BaseFragment<P : IBasePresenter> : ProxyFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (subscribe?.isDisposed) subscribe.dispose()
+        if (subscribe?.isDisposed!!) subscribe?.dispose()
         unInit()
     }
 
@@ -76,6 +76,10 @@ abstract class BaseFragment<P : IBasePresenter> : ProxyFragment() {
     protected abstract fun refreshData()
 
     protected abstract fun unInit()
+
+    fun back() : Boolean {
+        return false
+    }
 
     override fun showLoadingDialog() {
 

@@ -10,7 +10,7 @@ import com.zhangyc.jetpackdemo.entities.Entities
 import com.zhangyc.library.base.BaseViewHolder
 import kotlinx.android.synthetic.main.item_public_address.view.*
 
-class PubAddressListAdapter : BaseAdapter<PubAddressListAdapter.ViewHolder, List<Entities.PubAddress>>() {
+class PubAddressListAdapter : BaseAdapter<PubAddressListAdapter.ViewHolder, Entities.PubAddress>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val viewResId: Int = if (viewType == 1) R.layout.item_foot_view else R.layout.item_public_address

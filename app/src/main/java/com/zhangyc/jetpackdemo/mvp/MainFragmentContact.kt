@@ -13,6 +13,7 @@ import com.zhangyc.jetpackdemo.fragment.MainFragment
 import com.zhangyc.jetpackdemo.http.HttpApi
 import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.jetpackdemo.utils.ToastUtil
+import com.zhangyc.library.event.RxHelper
 import com.zhangyc.library.event.RxTimer
 import com.zhangyc.library.mvp.IBasePresenter
 import com.zhangyc.library.mvp.IBaseView

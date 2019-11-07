@@ -73,10 +73,10 @@ class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), 
             recyclerView_main.addItemDecoration(dividerItemDecoration)
             val pubAddressListAdapter = PubAddressListAdapter()
             pubAddressListAdapter.setOnRecyclerOnItemClickListener(object :
-                BaseAdapter.OnItemClickListener<List<Entities.PubAddress>> {
-                override fun itemClick(position: Int, data: List<Entities.PubAddress>?) {
+                BaseAdapter.OnItemClickListener<Entities.PubAddress> {
+                override fun itemClick(position: Int, data: Entities.PubAddress?) {
                     val bundle = Bundle()
-                    data?.get(position)?.id?.let { bundle.putInt("id", it) }
+                    data?.id?.let { bundle.putInt("id", it) }
                     NavHostFragment.findNavController(getCurrentFragment())
                         .navigate(R.id.action_mainFragment_to_historyFragment, bundle)
                 }

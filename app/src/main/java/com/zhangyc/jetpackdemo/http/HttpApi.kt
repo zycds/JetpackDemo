@@ -57,7 +57,7 @@ class HttpApi private constructor() {
         return api.logout().compose(RxHelper.handlerResult()).compose(RxHelper.handlerResultIO())
     }
 
-    fun getPubAddressLists() : Observable<List<Entities.PubAddress>> {
+    fun getPubAddressLists() : Observable<MutableList<Entities.PubAddress>> {
         return api.getPubAddressLists().compose(RxHelper.handlerResult()).compose(RxHelper.handlerResultIO())
     }
 
@@ -65,7 +65,7 @@ class HttpApi private constructor() {
         return api.getPubAddressHistoryLists(id, page).compose(RxHelper.handlerResult()).compose(RxHelper.handlerResultIO())
     }
 
-    fun getBanners() : Observable<List<Entities.Banner>> {
+    fun getBanners() : Observable<MutableList<Entities.Banner>> {
         return api.getBanners().compose(RxHelper.handlerResult()).compose(RxHelper.handlerResultIO())
     }
 

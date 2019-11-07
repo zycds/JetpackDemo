@@ -2,11 +2,11 @@ package com.zhangyc.library.db
 
 import android.content.Intent
 import android.content.IntentFilter
+import android.database.Cursor
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import androidx.annotation.RequiresApi
 import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.library.base.BaseApp
 import com.zhangyc.library.event.MsgEvent
@@ -22,31 +22,54 @@ class ReadSdMedia {
         val tag = ReadSdMedia::class.java.simpleName
     }
 
+    private var mMusicLists : MutableList<Music>? = null
+
+    fun getMusicLists() : MutableList<Music>?{
+        return mMusicLists
+    }
+
     fun sendScanSdcardReceiver() {
         Lg.debug(tag, "isExistSdcard :  ${SdcardUtil.instance.isExistSdcard()}")
         Lg.debug(tag, "sdcard path : ${SdcardUtil.instance.getSdcardPath()}")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            MediaScannerConnection.scanFile(BaseApp.instance, arrayOf(SdcardUtil.instance.getSdcardPath().toString()), null
+            MediaScannerConnection.scanFile(
+                BaseApp.instance, arrayOf(SdcardUtil.instance.getSdcardPath().toString()), null
             ) { p0, p1 ->
                 Lg.debug(tag, "p0 : $p0, p1 : $p1")
-                RxBus.instance.post(MsgEvent(ScanSdReceiver.ACTION_MEDIA_SCANNER_FINISHED, "MediaScannerConnection scanFile."))
+                RxBus.instance.post(
+                    MsgEvent(
+                        ScanSdReceiver.ACTION_MEDIA_SCANNER_FINISHED,
+                        "MediaScannerConnection scanFile."
+                    )
+                )
             }
         } else {
-            BaseApp.instance.sendBroadcast(Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse(SdcardUtil.instance.getSdcardPath())))
+            BaseApp.instance.sendBroadcast(
+                Intent(
+                    Intent.ACTION_MEDIA_MOUNTED,
+                    Uri.parse(SdcardUtil.instance.getSdcardPath())
+                )
+            )
         }
     }
 
+    private var scanSdReceiver: ScanSdReceiver? = null
     fun registerScanSdcardReceiver() {
-        val scanSdReceiver = ScanSdReceiver()
+        scanSdReceiver = ScanSdReceiver()
         val intentFilter = IntentFilter()
         intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_STARTED)
         intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED)
         BaseApp.instance.registerReceiver(scanSdReceiver, intentFilter)
     }
 
-    inline fun <reified D : Media> getSdcardMediaLists() : MutableList<D> {
-        val mutableListOf = mutableListOf<D>()
-        val query = BaseApp.instance.contentResolver.query(
+    fun unRegisterScanSdcardReceiver() {
+        if (scanSdReceiver != null) BaseApp.instance.unregisterReceiver(scanSdReceiver)
+    }
+
+    fun querySdcardMusicLists(): MutableList<Music>? {
+//        val mutableListOf = mutableListOf<D>()
+        mMusicLists = mutableListOf()
+        val query: Cursor? = BaseApp.instance.contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
             arrayOf(
                 MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
@@ -59,18 +82,18 @@ class ReadSdMedia {
                 val title = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE))
                 val artist = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST))
                 val id = query.getInt(query.getColumnIndexOrThrow(MediaStore.Audio.Media._ID))
-                val displayName : String? = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME))
+                val displayName: String? = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME))
                 val size = query.getLong(query.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE))
                 val dateModify = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DATE_MODIFIED))
-                val media = Media(id, title, artist, displayName, size, dateModify)
-                if (media is D) mutableListOf.add(media)
+                val media = Music(id, title, artist, displayName, size, dateModify)
+                mMusicLists?.add(media)
             }
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Lg.debug(tag, "exception : $e")
         } finally {
             query?.close()
         }
-        return mutableListOf
+        return mMusicLists
     }
 
 }

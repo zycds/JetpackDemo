@@ -5,6 +5,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
+import androidx.appcompat.widget.Toolbar
+import com.alibaba.android.arouter.launcher.ARouter
 import com.zhangyc.library.R
 import com.zhangyc.library.mvp.IBasePresenter
 import com.zhangyc.library.proxy.ProxyActivity
@@ -52,14 +54,24 @@ abstract class BaseActivity<P : IBasePresenter> : ProxyActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         tag = this.javaClass.simpleName
+        ARouter.getInstance().inject(this)
         init()
+        initToolBar()
         initData()
+    }
+
+    private fun initToolBar() {
+        val toolbarView : Toolbar? = getLayoutToolBar()
+        toolbarView?.title = setToolBarTitle()
+//        toolbarView?.navigationIcon = getDrawable(R.drawable.ic_arrow_back_black_50dp)
+        toolbarView?.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_black_40dp)
+        supportActionBar?.setHomeButtonEnabled(true)
+        setSupportActionBar(toolbarView)
     }
 
     override fun onResume() {
         super.onResume()
         resume()
-        refreshData()
     }
 
     override fun onPause() {
@@ -103,4 +115,11 @@ abstract class BaseActivity<P : IBasePresenter> : ProxyActivity() {
 
     open fun pause() {}
 
+    open fun getLayoutToolBar() : Toolbar?{
+        return null
+    }
+
+    open fun setToolBarTitle() : String {
+        return "MainToolBar"
+    }
 }

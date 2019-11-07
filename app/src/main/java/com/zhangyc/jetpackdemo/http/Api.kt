@@ -21,11 +21,11 @@ interface Api {
     fun logout() : Observable<BaseData<Any?>>
 
     @GET("/wxarticle/chapters/json")
-    fun getPubAddressLists() : Observable<BaseData<List<Entities.PubAddress>>>
+    fun getPubAddressLists() : Observable<BaseData<MutableList<Entities.PubAddress>>>
 
     @GET("/wxarticle/list/{id}/{page}/json")
     fun getPubAddressHistoryLists(@Path("id") id : Int, @Path("page") page : Int) : Observable<BaseData<Entities.PublicAHistoryPage>>
 
     @GET("/banner/json")
-    fun getBanners() : Observable<BaseData<List<Entities.Banner>>>
+    fun getBanners() : Observable<BaseData<MutableList<Entities.Banner>>>
 }

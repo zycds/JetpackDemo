@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/navigation_media" app:startDestination="@id/mediaContainerFragment">
+
+    <fragment android:id="@+id/musicFragment" android:name="com.zhangyc.media_player.fragment.MusicFragment"
+              android:label="MusicFragment">
+        <action android:id="@+id/action_musicFragment_to_mediaContainerFragment"
+                app:destination="@id/mediaContainerFragment"/>
+    </fragment>
+    <fragment android:id="@+id/videoFragment" android:name="com.zhangyc.media_player.fragment.VideoFragment"
+              android:label="VideoFragment">
+        <action android:id="@+id/action_videoFragment_to_mediaContainerFragment"
+                app:destination="@id/mediaContainerFragment"/>
+    </fragment>
+    <fragment android:id="@+id/mediaContainerFragment"
+              android:name="com.zhangyc.media_player.fragment.MediaContainerFragment"
+              android:label="MediaContainerFragment">
+        <action android:id="@+id/action_mediaContainerFragment_to_videoFragment" app:destination="@id/videoFragment"/>
+        <action android:id="@+id/action_mediaContainerFragment_to_musicFragment" app:destination="@id/musicFragment"/>
+    </fragment>
+</navigation>
