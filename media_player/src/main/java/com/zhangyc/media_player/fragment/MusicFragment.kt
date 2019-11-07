@@ -3,9 +3,13 @@ package com.zhangyc.media_player.fragment
 import android.content.Context
 import com.zhangyc.library.annotations.InjectPresenter
 import com.zhangyc.library.base.BaseFragment
+import com.zhangyc.library.db.Music
+import com.zhangyc.library.db.ReadSdMedia
+import com.zhangyc.media_player.ConstantKey
 import com.zhangyc.media_player.R
 import com.zhangyc.media_player.mvp.MusicContact
 import kotlinx.android.synthetic.main.fragment_music.*
+import kotlinx.android.synthetic.main.item_music.*
 
 class MusicFragment :BaseFragment<MusicContact.MusicPresenter>(), MusicContact.IMusicView {
 
@@ -35,7 +39,8 @@ class MusicFragment :BaseFragment<MusicContact.MusicPresenter>(), MusicContact.I
     }
 
     override fun init() {
-
+        val position = arguments?.getInt(ConstantKey.KEY_MEDIA_CLICK_POSITION)
+        ReadSdMedia.instance.getMusicLists()?.get(position!!)
     }
 
     override fun getLayoutResId(): Int {
@@ -57,5 +62,17 @@ class MusicFragment :BaseFragment<MusicContact.MusicPresenter>(), MusicContact.I
         return activity
     }
 
+    override fun getCurrentFragment(): MusicFragment {
+        return this
+    }
+
+    override fun refreshMusicInfo(music: Music) {
+        text_title.text = music.title
+        text_album_name.text = music.displayName
+    }
+
+    override fun updateProgress(progress: Int) {
+
+    }
 
 }

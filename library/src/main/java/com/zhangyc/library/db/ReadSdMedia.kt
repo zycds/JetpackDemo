@@ -7,12 +7,12 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import com.blankj.utilcode.util.SDCardUtils
 import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.library.base.BaseApp
 import com.zhangyc.library.event.MsgEvent
 import com.zhangyc.library.event.RxBus
 import com.zhangyc.library.receiver.ScanSdReceiver
-import com.zhangyc.library.utils.SdcardUtil
 
 class ReadSdMedia {
 
@@ -29,11 +29,11 @@ class ReadSdMedia {
     }
 
     fun sendScanSdcardReceiver() {
-        Lg.debug(tag, "isExistSdcard :  ${SdcardUtil.instance.isExistSdcard()}")
-        Lg.debug(tag, "sdcard path : ${SdcardUtil.instance.getSdcardPath()}")
+        Lg.debug(tag, "isExistSdcard :  ${SDCardUtils.isSDCardEnableByEnvironment()}")
+        Lg.debug(tag, "sdcard path : ${SDCardUtils.getSDCardPathByEnvironment()}")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             MediaScannerConnection.scanFile(
-                BaseApp.instance, arrayOf(SdcardUtil.instance.getSdcardPath().toString()), null
+                BaseApp.instance, arrayOf(SDCardUtils.getSDCardPathByEnvironment()), null
             ) { p0, p1 ->
                 Lg.debug(tag, "p0 : $p0, p1 : $p1")
                 RxBus.instance.post(
@@ -47,7 +47,7 @@ class ReadSdMedia {
             BaseApp.instance.sendBroadcast(
                 Intent(
                     Intent.ACTION_MEDIA_MOUNTED,
-                    Uri.parse(SdcardUtil.instance.getSdcardPath())
+                    Uri.parse(SDCardUtils.getSDCardPathByEnvironment())
                 )
             )
         }

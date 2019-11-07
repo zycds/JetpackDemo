@@ -2,15 +2,11 @@ package com.zhangyc.media_player.fragment
 
 import android.content.Context
 import android.graphics.Rect
-import android.os.Bundle
 import android.view.View
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zhangyc.library.annotations.InjectPresenter
-import com.zhangyc.library.base.BaseAdapter
 import com.zhangyc.library.base.BaseFragment
-import com.zhangyc.library.db.Media
 import com.zhangyc.library.db.Music
 import com.zhangyc.media_player.R
 import com.zhangyc.media_player.mvp.MediaContainerContact
@@ -20,27 +16,18 @@ class MediaContainerFragment : BaseFragment<MediaContainerContact.MediaContainer
     MediaContainerContact.IMediaContainerView {
 
     @InjectPresenter
-    lateinit var mPresenter : MediaContainerContact.MediaContainerPresenter
+    lateinit var mPresenter: MediaContainerContact.MediaContainerPresenter
 
 
     override fun handlerClickListener(id: Int?) {
         super.handlerClickListener(id)
-        when(id!!) {
-            R.id.image_music->{
-                setAdapterAndClickListener<Music>()
-                val bundle = Bundle()
-                bundle.putInt("position", 1)
-                NavHostFragment.findNavController(this).navigate(R.id.musicFragment, bundle)
-            }
-            R.id.image_video->{
-                val bundle = Bundle()
-                bundle.putInt("position", 1)
-                NavHostFragment.findNavController(this).navigate(R.id.videoFragment, bundle)
-            }
-            R.id.image_pic->{
-
-            }
+        val mediaTag = when (id!!) {
+            R.id.image_music -> MediaContainerContact.MediaTag.MUSIC
+            R.id.image_video -> MediaContainerContact.MediaTag.VIDEO
+            R.id.image_pic -> MediaContainerContact.MediaTag.PIC
+            else -> MediaContainerContact.MediaTag.MUSIC
         }
+        mPresenter.setAdapterAndClickListener<Music>(tag = mediaTag)
     }
 
     override fun init() {
@@ -54,6 +41,7 @@ class MediaContainerFragment : BaseFragment<MediaContainerContact.MediaContainer
     override fun initData() {
         setOnClickListeners(image_music, image_video, image_pic)
         mPresenter.registerObservableSdScan()
+        mPresenter.setAdapterAndClickListener<Music>(tag = MediaContainerContact.MediaTag.MUSIC)
     }
 
     override fun refreshData() {
@@ -69,7 +57,7 @@ class MediaContainerFragment : BaseFragment<MediaContainerContact.MediaContainer
     override fun getRecyclerView(): RecyclerView {
         if (recyclerView_media.adapter == null) {
             recyclerView_media.layoutManager = LinearLayoutManager(context)
-            recyclerView_media.addItemDecoration(object : RecyclerView.ItemDecoration(){
+            recyclerView_media.addItemDecoration(object : RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(
                     outRect: Rect,
                     view: View,
@@ -86,12 +74,8 @@ class MediaContainerFragment : BaseFragment<MediaContainerContact.MediaContainer
         return recyclerView_media
     }
 
-    private fun <D : Media> setAdapterAndClickListener() {
-        recyclerView_media.adapter = mPresenter.getAdapter<D>()
-        mPresenter.getAdapter<D>().setOnRecyclerOnItemClickListener(object : BaseAdapter.OnItemClickListener<D> {
-            override fun itemClick(position: Int, data: D?) {
-
-            }
-        })
+    override fun getCurrentFragment(): MediaContainerFragment {
+        return this
     }
+
 }

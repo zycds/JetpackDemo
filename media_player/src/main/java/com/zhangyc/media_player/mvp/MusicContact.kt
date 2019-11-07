@@ -5,25 +5,43 @@ import android.content.Context
 import android.content.ServiceConnection
 import android.os.IBinder
 import com.blankj.utilcode.util.ServiceUtils
+import com.zhangyc.jetpackdemo.utils.Lg
+import com.zhangyc.library.db.Music
+import com.zhangyc.library.event.RxHelper
+import com.zhangyc.library.event.RxTimer
 import com.zhangyc.library.mvp.IBasePresenter
 import com.zhangyc.library.mvp.IBaseView
+import com.zhangyc.media_player.fragment.MusicFragment
 import com.zhangyc.media_player.service.MusicService
+import io.reactivex.disposables.Disposable
+import java.util.concurrent.TimeUnit
 
 interface MusicContact {
 
-    interface IMusicView {
+    companion object {
+        val tag = MusicContact::class.java.simpleName
+    }
 
+    interface IMusicView {
+        fun refreshMusicInfo(music: Music)
+        fun updateProgress(progress : Int)
+        fun getCurrentFragment() : MusicFragment
     }
 
     class MusicPresenter : IBasePresenter {
 
+        private var mMusicView : IMusicView? = null
+
         private var mBinder : MusicService.MusicBinder? = null
 
-        override fun <V : IBaseView> attachView(v: V) {
+        private var mSubscribeUpdateProgress : Disposable? = null
 
+        override fun <V : IBaseView> attachView(v: V) {
+            mMusicView = v as IMusicView
         }
 
         override fun deAttachView() {
+            disposeUpdateProgress()
         }
 
         override fun requestFinish(success: Boolean) {
@@ -35,6 +53,7 @@ interface MusicContact {
             } else {
                 getMusicBinder()?.play()
             }
+            subscribeUpdateProgress()
         }
 
         private val conn : ServiceConnection = object : ServiceConnection {
@@ -51,6 +70,27 @@ interface MusicContact {
 
         fun getMusicBinder() : MusicService.MusicBinder? {
             return mBinder
+        }
+
+        private fun subscribeUpdateProgress() {
+            disposeUpdateProgress()
+            mSubscribeUpdateProgress = RxTimer.instance.interval(
+                mMusicView?.getCurrentFragment()?.activity!!,
+                1,
+                TimeUnit.SECONDS,
+                Long.MAX_VALUE
+            )
+                .compose(RxHelper.handlerResultIO())
+                .subscribe({
+                    Lg.debug(tag, "subscribeUpdateProgress :  $it")
+                }, {
+                    Lg.debug(tag, "subscribeUpdateProgress exception :  $it")
+                })
+        }
+
+        private fun disposeUpdateProgress() {
+            if (mSubscribeUpdateProgress?.isDisposed == true) mSubscribeUpdateProgress?.dispose()
+            mSubscribeUpdateProgress = null
         }
 
     }

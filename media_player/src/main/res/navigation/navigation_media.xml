@@ -18,5 +18,11 @@
               android:label="MediaContainerFragment">
         <action android:id="@+id/action_mediaContainerFragment_to_videoFragment" app:destination="@id/videoFragment"/>
         <action android:id="@+id/action_mediaContainerFragment_to_musicFragment" app:destination="@id/musicFragment"/>
+        <action android:id="@+id/action_mediaContainerFragment_to_picFragment" app:destination="@id/picFragment"/>
+    </fragment>
+    <fragment android:id="@+id/picFragment" android:name="com.zhangyc.media_player.fragment.PicFragment"
+              android:label="PicFragment">
+        <action android:id="@+id/action_picFragment_to_mediaContainerFragment"
+                app:destination="@id/mediaContainerFragment"/>
     </fragment>
 </navigation>
