@@ -2,12 +2,14 @@ package com.zhangyc.jetpackdemo.mvp
 
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
-import com.zhangyc.jetpackdemo.R
 import com.zhangyc.jetpackdemo.http.HttpApi
 import com.zhangyc.jetpackdemo.utils.ToastUtil
 import com.zhangyc.library.mvp.IBasePresenter
 import com.zhangyc.library.mvp.IBaseView
 import io.reactivex.disposables.Disposable
+import com.zhangyc.jetpackdemo.R
+import com.zhangyc.library.SocketClient
+
 
 interface LoginContact {
 
@@ -32,8 +34,10 @@ interface LoginContact {
         }
 
         fun login() {
+            SocketClient.connect()
             mSubscribe = HttpApi.instance.login(iLoginView.getUserName(), iLoginView.getPassword())
                 .subscribe({
+                    SocketClient.sendMsg("client send msg.")
                     NavHostFragment.findNavController(iLoginView.getCurrentFragment()).navigate(R.id.action_loginFragment_to_mainFragment)
                 }, {
                     ToastUtil.showShortToast(iLoginView.getActivityContext()!!, "it : ${it.localizedMessage}")

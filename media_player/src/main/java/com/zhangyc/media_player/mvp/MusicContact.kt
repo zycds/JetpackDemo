@@ -24,7 +24,7 @@ interface MusicContact {
 
     interface IMusicView {
         fun refreshMusicInfo(music: Music)
-        fun updateProgress(progress : Int)
+        fun updateProgress(progress : Long)
         fun getCurrentFragment() : MusicFragment
     }
 
@@ -36,12 +36,15 @@ interface MusicContact {
 
         private var mSubscribeUpdateProgress : Disposable? = null
 
+        private var mStopPredicate : Boolean = false
+
         override fun <V : IBaseView> attachView(v: V) {
             mMusicView = v as IMusicView
         }
 
         override fun deAttachView() {
             disposeUpdateProgress()
+            mStopPredicate = true
         }
 
         override fun requestFinish(success: Boolean) {
@@ -80,11 +83,15 @@ interface MusicContact {
                 TimeUnit.SECONDS,
                 Long.MAX_VALUE
             )
-                .compose(RxHelper.handlerResultIO())
+                .takeWhile {
+                    !mStopPredicate
+                }.compose(RxHelper.handlerResultIO())
                 .subscribe({
                     Lg.debug(tag, "subscribeUpdateProgress :  $it")
+                    mMusicView?.updateProgress(getMusicBinder()?.getCurrentProgress()?:0)
                 }, {
                     Lg.debug(tag, "subscribeUpdateProgress exception :  $it")
+                    mMusicView?.updateProgress(getMusicBinder()?.getCurrentProgress()?:0)
                 })
         }
 

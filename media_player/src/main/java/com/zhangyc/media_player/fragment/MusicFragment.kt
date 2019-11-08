@@ -71,7 +71,7 @@ class MusicFragment :BaseFragment<MusicContact.MusicPresenter>(), MusicContact.I
         text_album_name.text = music.displayName
     }
 
-    override fun updateProgress(progress: Int) {
+    override fun updateProgress(progress: Long) {
 
     }
 

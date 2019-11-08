@@ -1,5 +1,6 @@
 package com.zhangyc.media_player.mvp
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.zhangyc.library.event.RxHelper
 import com.zhangyc.library.mvp.IBasePresenter
 import com.zhangyc.library.mvp.IBaseView
 import com.zhangyc.library.receiver.ScanSdReceiver
+import com.zhangyc.media_player.ConstantKey
 import com.zhangyc.media_player.R
 import com.zhangyc.media_player.fragment.MediaContainerFragment
 import com.zhangyc.media_player.media_activity.MediaActivity
@@ -82,14 +84,13 @@ interface MediaContainerContact {
         }
 
         fun <D : Media> setAdapterAndClickListener(tag: MediaTag) {
-            Lg.debug(TAG, "MediaTag : ${tag.name}")
-
-            NavHostFragment.findNavController(mMediaContainerView?.getCurrentFragment()!!).navigate(R.id.musicFragment)
-            return
-            /*mMediaContainerView?.getRecyclerView()?.adapter = getAdapter<D>()
+            Lg.debug(TAG, "c : ${tag.name}")
+            val adapter = getAdapter<D>()
+            mMediaContainerView?.getRecyclerView()?.adapter = adapter
             val mediaContainerFragment = mMediaContainerView?.getCurrentFragment()
-            getAdapter<D>().setOnRecyclerOnItemClickListener(object : BaseAdapter.OnItemClickListener<D> {
+            adapter.setOnRecyclerOnItemClickListener(object : BaseAdapter.OnItemClickListener<D> {
                 override fun itemClick(position: Int, data: D?) {
+                    Lg.debug(TAG, "tag : $tag, position : $position")
                     val bundle = Bundle()
                     bundle.putInt(ConstantKey.KEY_MEDIA_CLICK_POSITION, position)
                     val resId = when (tag) {
@@ -99,7 +100,7 @@ interface MediaContainerContact {
                     }
                     NavHostFragment.findNavController(mediaContainerFragment!!).navigate(resId, bundle)
                 }
-            })*/
+            })
         }
 
         private fun <D : Media> getAdapter(): Adapter<D> {
