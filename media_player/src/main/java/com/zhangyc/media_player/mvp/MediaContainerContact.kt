@@ -1,6 +1,5 @@
 package com.zhangyc.media_player.mvp
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,6 @@ import com.zhangyc.library.event.RxHelper
 import com.zhangyc.library.mvp.IBasePresenter
 import com.zhangyc.library.mvp.IBaseView
 import com.zhangyc.library.receiver.ScanSdReceiver
-import com.zhangyc.media_player.ConstantKey
 import com.zhangyc.media_player.R
 import com.zhangyc.media_player.fragment.MediaContainerFragment
 import com.zhangyc.media_player.media_activity.MediaActivity
