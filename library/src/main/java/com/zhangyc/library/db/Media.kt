@@ -6,5 +6,6 @@ open class Media(
     var artist: String?,
     var displayName: String?,
     var size: Long?,
-    var dateModify: String?
+    var dateModify: String?,
+    var path : String
 )

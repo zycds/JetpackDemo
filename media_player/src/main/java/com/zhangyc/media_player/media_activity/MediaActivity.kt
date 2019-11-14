@@ -10,9 +10,12 @@ import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.library.RouterConstants
 import com.zhangyc.library.annotations.InjectPresenter
 import com.zhangyc.library.base.BaseActivity
+import com.zhangyc.library.event.MsgEvent
+import com.zhangyc.library.event.RxBus
 import com.zhangyc.media_player.R
 import com.zhangyc.media_player.fragment.MediaContainerFragment
 import com.zhangyc.media_player.mvp.MediaContact
+import kotlinx.android.synthetic.main.activity_media.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 @Route(path = RouterConstants.ACTIVITY_URL_MEDIA)
@@ -31,7 +34,7 @@ open class MediaActivity : BaseActivity<MediaContact.MediaPresenter>(), MediaCon
     }
 
     override fun refreshData() {
-
+        RxBus.instance.post(MsgEvent(MsgEvent.REFRESH_DATA_FRAGMENT, fragment_media_container.findNavController().currentDestination?.label as String))
     }
 
     override fun unInit() {

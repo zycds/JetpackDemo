@@ -23,9 +23,14 @@ class ReadSdMedia {
     }
 
     private var mMusicLists : MutableList<Music>? = null
+    private var mVideoLists : MutableList<Video>? = null
 
     fun getMusicLists() : MutableList<Music>?{
         return mMusicLists
+    }
+
+    fun getVideoLists() : MutableList<Video>? {
+        return mVideoLists
     }
 
     fun sendScanSdcardReceiver() {
@@ -74,7 +79,8 @@ class ReadSdMedia {
             arrayOf(
                 MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
                 MediaStore.Audio.Media.SIZE, MediaStore.Audio.Media.DATE_MODIFIED,
-                MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DISPLAY_NAME
+                MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DISPLAY_NAME, MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.ALBUM_ID
             ), null, null, null
         )
         try {
@@ -85,15 +91,49 @@ class ReadSdMedia {
                 val displayName: String? = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME))
                 val size = query.getLong(query.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE))
                 val dateModify = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DATE_MODIFIED))
-                val media = Music(id, title, artist, displayName, size, dateModify)
+                val path = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA))
+                val albumId = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID))
+                val media = Music(id, title, artist, displayName, size, dateModify, path, albumId)
                 mMusicLists?.add(media)
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Lg.debug(tag, "exception : $e")
         } finally {
             query?.close()
         }
         return mMusicLists
     }
+
+
+    fun querySdcardVideoLists(): MutableList<Video>? {
+        mVideoLists = mutableListOf()
+        val query: Cursor? = BaseApp.instance.contentResolver.query(
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+            arrayOf(
+                MediaStore.Video.Media.TITLE, MediaStore.Video.Media.ARTIST,
+                MediaStore.Video.Media.SIZE, MediaStore.Video.Media.DATE_MODIFIED,
+                MediaStore.Video.Media._ID, MediaStore.Video.Media.DISPLAY_NAME, MediaStore.Video.Media.DATA
+            ), null, null, null
+        )
+        try {
+            while ((query?.moveToNext())!!) {
+                val title = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE))
+                val artist = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.ARTIST))
+                val id = query.getInt(query.getColumnIndexOrThrow(MediaStore.Video.Media._ID))
+                val displayName: String? = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME))
+                val size = query.getLong(query.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE))
+                val dateModify = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_MODIFIED))
+                val path = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.DATA))
+                val media = Video(id, title, artist, displayName, size, dateModify, path)
+                mVideoLists?.add(media)
+            }
+        } catch (e: Throwable) {
+            Lg.debug(tag, "exception : $e")
+        } finally {
+            query?.close()
+        }
+        return mVideoLists
+    }
+
 
 }

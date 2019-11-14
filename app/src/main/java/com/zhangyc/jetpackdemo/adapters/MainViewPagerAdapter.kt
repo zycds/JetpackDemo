@@ -24,7 +24,7 @@ class MainViewPagerAdapter : PagerAdapter() {
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        var imageView = ImageView(App.instance.applicationContext)
+        val imageView = ImageView(App.instance.applicationContext)
         imageView.scaleType = ImageView.ScaleType.FIT_XY
         Glide.with(App.instance.applicationContext).load(mBanners?.get(position % (mBanners?.size!!))?.imagePath).into(imageView)
         container.addView(imageView)

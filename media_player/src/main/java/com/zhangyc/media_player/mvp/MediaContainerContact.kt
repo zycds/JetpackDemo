@@ -70,6 +70,7 @@ interface MediaContainerContact {
                         when (it.code) {
                             ScanSdReceiver.ACTION_MEDIA_SCANNER_FINISHED -> {
                                 ReadSdMedia.instance.querySdcardMusicLists()
+                                ReadSdMedia.instance.querySdcardVideoLists()
                                 Lg.debug(
                                     MediaContact.tag,
                                     "musicList size : ${ReadSdMedia.instance.getMusicLists()?.size}"

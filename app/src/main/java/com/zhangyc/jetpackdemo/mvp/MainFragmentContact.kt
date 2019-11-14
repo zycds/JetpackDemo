@@ -50,9 +50,9 @@ interface MainFragmentContact {
         override fun deAttachView() {
             mStopTimer = true
             Lg.debug(tag, "deAttachView....")
-            if (mTimerDisposable?.isDisposed!!)mTimerDisposable?.dispose()
-            if (mSubscribe?.isDisposed!!)mSubscribe?.dispose()
-            if (mSubscribe2?.isDisposed!!) mSubscribe2?.dispose()
+            if (mTimerDisposable != null && mTimerDisposable!!.isDisposed)mTimerDisposable?.dispose()
+            if (mSubscribe != null && mSubscribe!!.isDisposed)mSubscribe?.dispose()
+            if (mSubscribe2 != null && mSubscribe2!!.isDisposed) mSubscribe2?.dispose()
             mSubscribe = null
             mSubscribe2 = null
             mTimerDisposable = null

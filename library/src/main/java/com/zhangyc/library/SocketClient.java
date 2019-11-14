@@ -21,6 +21,8 @@ public class SocketClient {
 
     private static String receiveMsg;
 
+    private static Socket mSocket;
+
     public static void connect() {
         executorService.execute(new ConnectService());
     }
@@ -38,7 +40,7 @@ public class SocketClient {
 
         @Override
         public void run() {
-            printWriter.println(this.msg);
+            if(printWriter != null) printWriter.println(this.msg);
         }
     }
 
@@ -47,11 +49,11 @@ public class SocketClient {
         @Override
         public void run() {//可以考虑在此处添加一个while循环，结合下面的catch语句，实现Socket对象获取失败后的超时重连，直到成功建立Socket连接
             try {
-                Socket socket = new Socket(NetworkUtils.getIpAddressByWifi(), 8090);      //步骤一
-                socket.setSoTimeout(60000);
+                mSocket = new Socket(NetworkUtils.getIpAddressByWifi(), 8090);      //步骤一
+                mSocket.setSoTimeout(60000);
                 printWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(   //步骤二
-                        socket.getOutputStream(), StandardCharsets.UTF_8)), true);
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+                        mSocket.getOutputStream(), StandardCharsets.UTF_8)), true);
+                in = new BufferedReader(new InputStreamReader(mSocket.getInputStream(), StandardCharsets.UTF_8));
                 receiveMsg();
             } catch (Exception e) {
                 Log.e(TAG, ("connectService:" + e.getMessage()));   //如果Socket对象获取失败，即连接建立失败，会走到这段逻辑
@@ -61,7 +63,7 @@ public class SocketClient {
 
     private static void receiveMsg() {
         try {
-            while (true) {                                      //步骤三
+            while (mSocket != null && mSocket.isConnected()) {                                      //步骤三
                 if ((receiveMsg = in.readLine()) != null) {
                     Log.d(TAG, "receiveMsg:" + receiveMsg);
                 }

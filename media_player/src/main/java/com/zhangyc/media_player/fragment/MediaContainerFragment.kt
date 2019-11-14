@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zhangyc.library.annotations.InjectPresenter
 import com.zhangyc.library.base.BaseFragment
 import com.zhangyc.library.db.Music
+import com.zhangyc.library.db.ReadSdMedia
 import com.zhangyc.media_player.R
 import com.zhangyc.media_player.mvp.MediaContainerContact
 import kotlinx.android.synthetic.main.fragment_media_container.*
@@ -45,6 +46,7 @@ class MediaContainerFragment : BaseFragment<MediaContainerContact.MediaContainer
     }
 
     override fun refreshData() {
+        ReadSdMedia.instance.sendScanSdcardReceiver()
     }
 
     override fun unInit() {

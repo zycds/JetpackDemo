@@ -8,7 +8,7 @@ import com.zhangyc.library.mvp.IBaseView
 
 abstract class ProxyActivity : RxAppCompatActivity(), IBaseView {
 
-    lateinit var proxyPresenter: IProxyPresenter
+    private lateinit var proxyPresenter: IProxyPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
