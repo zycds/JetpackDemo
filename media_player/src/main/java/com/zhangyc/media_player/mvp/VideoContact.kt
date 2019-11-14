@@ -6,7 +6,7 @@ import com.zhangyc.library.mvp.IBaseView
 
 interface VideoContact {
 
-    interface IVideoView {
+    interface IVideoView : IBaseView {
 
     }
 
