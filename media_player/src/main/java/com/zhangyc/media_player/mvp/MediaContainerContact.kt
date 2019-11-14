@@ -73,7 +73,7 @@ interface MediaContainerContact {
                                 ReadSdMedia.instance.querySdcardVideoLists()
                                 Lg.debug(
                                     MediaContact.tag,
-                                    "musicList size : ${ReadSdMedia.instance.getMusicLists()?.size}"
+                                    "musicList size : ${ReadSdMedia.instance.getMusicLists()?.size} , video size : ${ReadSdMedia.instance.getVideoLists()?.size}"
                                 )
                                 mMediaContainerView?.getRecyclerView()?.adapter?.notifyDataSetChanged()
                             }
