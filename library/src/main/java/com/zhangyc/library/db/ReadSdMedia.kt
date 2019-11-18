@@ -72,34 +72,36 @@ class ReadSdMedia {
     }
 
     fun querySdcardMusicLists(): MutableList<Music>? {
-//        val mutableListOf = mutableListOf<D>()
         mMusicLists = mutableListOf()
-        val query: Cursor? = BaseApp.instance.contentResolver.query(
-            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-            arrayOf(
-                MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
-                MediaStore.Audio.Media.SIZE, MediaStore.Audio.Media.DATE_MODIFIED,
-                MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DISPLAY_NAME, MediaStore.Audio.Media.DATA,
-                MediaStore.Audio.Media.ALBUM_ID
-            ), null, null, null
-        )
-        try {
-            while ((query?.moveToNext())!!) {
-                val title = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE))
-                val artist = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST))
-                val id = query.getInt(query.getColumnIndexOrThrow(MediaStore.Audio.Media._ID))
-                val displayName: String? = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME))
-                val size = query.getLong(query.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE))
-                val dateModify = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DATE_MODIFIED))
-                val path = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA))
-                val albumId = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID))
-                val media = Music(id, title, artist, displayName, size, dateModify, path, albumId)
-                mMusicLists?.add(media)
+        synchronized(instance) {
+            Lg.debug(tag, "querySdcardMusicLists")
+            val query: Cursor? = BaseApp.instance.contentResolver.query(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                arrayOf(
+                    MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
+                    MediaStore.Audio.Media.SIZE, MediaStore.Audio.Media.DATE_MODIFIED,
+                    MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DISPLAY_NAME, MediaStore.Audio.Media.DATA,
+                    MediaStore.Audio.Media.ALBUM_ID
+                ), null, null, null
+            )
+            try {
+                while ((query?.moveToNext())!!) {
+                    val title = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE))
+                    val artist = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST))
+                    val id = query.getInt(query.getColumnIndexOrThrow(MediaStore.Audio.Media._ID))
+                    val displayName: String? = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME))
+                    val size = query.getLong(query.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE))
+                    val dateModify = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DATE_MODIFIED))
+                    val path = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA))
+                    val albumId = query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID))
+                    val media = Music(id, title, artist, displayName, size, dateModify, path, albumId)
+                    mMusicLists?.add(media)
+                }
+            } catch (e: Throwable) {
+                Lg.debug(tag, "exception : $e")
+            } finally {
+                query?.close()
             }
-        } catch (e: Throwable) {
-            Lg.debug(tag, "exception : $e")
-        } finally {
-            query?.close()
         }
         return mMusicLists
     }
@@ -107,30 +109,34 @@ class ReadSdMedia {
 
     fun querySdcardVideoLists(): MutableList<Video>? {
         mVideoLists = mutableListOf()
-        val query: Cursor? = BaseApp.instance.contentResolver.query(
-            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-            arrayOf(
-                MediaStore.Video.Media.TITLE, MediaStore.Video.Media.ARTIST,
-                MediaStore.Video.Media.SIZE, MediaStore.Video.Media.DATE_MODIFIED,
-                MediaStore.Video.Media._ID, MediaStore.Video.Media.DISPLAY_NAME, MediaStore.Video.Media.DATA
-            ), null, null, null
-        )
-        try {
-            while ((query?.moveToNext())!!) {
-                val title = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE))
-                val artist = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.ARTIST))
-                val id = query.getInt(query.getColumnIndexOrThrow(MediaStore.Video.Media._ID))
-                val displayName: String? = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME))
-                val size = query.getLong(query.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE))
-                val dateModify = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_MODIFIED))
-                val path = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.DATA))
-                val media = Video(id, title, artist, displayName, size, dateModify, path)
-                mVideoLists?.add(media)
+        synchronized(instance) {
+            Lg.debug(tag, "querySdcardVideoLists")
+            val query: Cursor? = BaseApp.instance.contentResolver.query(
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                arrayOf(
+                    MediaStore.Video.Media.TITLE, MediaStore.Video.Media.ARTIST,
+                    MediaStore.Video.Media.SIZE, MediaStore.Video.Media.DATE_MODIFIED,
+                    MediaStore.Video.Media._ID, MediaStore.Video.Media.DISPLAY_NAME, MediaStore.Video.Media.DATA
+                ), null, null, null
+            )
+            try {
+                while ((query?.moveToNext())!!) {
+                    val title = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE))
+                    val artist = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.ARTIST))
+                    val id = query.getInt(query.getColumnIndexOrThrow(MediaStore.Video.Media._ID))
+                    val displayName: String? = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME))
+                    val size = query.getLong(query.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE))
+                    val dateModify = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_MODIFIED))
+                    val path = query.getString(query.getColumnIndexOrThrow(MediaStore.Video.Media.DATA))
+                    val media = Video(id, title, artist, displayName, size, dateModify, path)
+                    Lg.debug(tag, "path : $path, title : $title")
+                    mVideoLists?.add(media)
+                }
+            } catch (e: Throwable) {
+                Lg.debug(tag, "exception : $e")
+            } finally {
+                query?.close()
             }
-        } catch (e: Throwable) {
-            Lg.debug(tag, "exception : $e")
-        } finally {
-            query?.close()
         }
         return mVideoLists
     }

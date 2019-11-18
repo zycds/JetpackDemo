@@ -4,4 +4,81 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <TableLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="@android:color/black"
+    >
+        <TableRow>
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="A"
+                    android:textColor="@android:color/black"
+                    android:textSize="22sp"
+                    android:background="@android:color/white"
+                    android:layout_margin="1dp"
+                    android:gravity="center"
+            />
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="B"
+                    android:textColor="@android:color/black"
+                    android:textSize="22sp"
+                    android:background="@android:color/white"
+                    android:layout_margin="1dp"
+                    android:gravity="center"
+            />
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="A"
+                    android:textColor="@android:color/black"
+                    android:textSize="22sp"
+                    android:background="@android:color/white"
+                    android:layout_margin="1dp"
+                    android:gravity="center"
+            />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="A"
+                    android:textColor="@android:color/black"
+                    android:textSize="22sp"
+                    android:background="@android:color/white"
+                    android:layout_margin="1dp"
+                    android:gravity="center"
+            />
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="B"
+                    android:textColor="@android:color/black"
+                    android:textSize="22sp"
+                    android:background="@android:color/white"
+                    android:layout_margin="1dp"
+                    android:gravity="center"
+            />
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="A"
+                    android:textColor="@android:color/black"
+                    android:textSize="22sp"
+                    android:background="@android:color/white"
+                    android:layout_margin="1dp"
+                    android:gravity="center"
+            />
+        </TableRow>
+
+    </TableLayout>
+
 </LinearLayout>

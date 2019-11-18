@@ -42,9 +42,13 @@ interface MediaContainerContact {
 
     class MediaContainerPresenter : IBasePresenter {
 
+        private val tag = MediaContainerPresenter::class.java.simpleName
+
         private var mMediaContainerView: IMediaContainerView? = null
 
         private var subscribe: Disposable? = null
+
+        private var mCurrentTag : MediaTag = MediaTag.MUSIC
 
         override fun <V : IBaseView> attachView(v: V) {
             mMediaContainerView = v as IMediaContainerView
@@ -86,8 +90,10 @@ interface MediaContainerContact {
 
         fun <D : Media> setAdapterAndClickListener(tag: MediaTag) {
             Lg.debug(TAG, "c : ${tag.name}")
+            mCurrentTag = tag
             val adapter = getAdapter<D>()
             mMediaContainerView?.getRecyclerView()?.adapter = adapter
+            mMediaContainerView?.getRecyclerView()?.adapter?.notifyDataSetChanged()
             val mediaContainerFragment = mMediaContainerView?.getCurrentFragment()
             adapter.setOnRecyclerOnItemClickListener(object : BaseAdapter.OnItemClickListener<D> {
                 override fun itemClick(position: Int, data: D?) {
@@ -110,19 +116,21 @@ interface MediaContainerContact {
 
         inner class Adapter<D : Media> : BaseAdapter<ViewHolder, D>() {
             override fun itemCount(): Int {
-                return ReadSdMedia.instance.getMusicLists()?.size ?: 0
+                return if (mCurrentTag == MediaTag.MUSIC) ReadSdMedia.instance.getMusicLists()?.size ?: 0 else ReadSdMedia.instance.getVideoLists()?.size ?: 0
             }
 
             override fun binderViewHolder(holder: ViewHolder, position: Int) {
-                val get = ReadSdMedia.instance.getMusicLists()?.get(position)
+                val get = if (mCurrentTag == MediaTag.MUSIC) ReadSdMedia.instance.getMusicLists()?.get(position) else ReadSdMedia.instance.getVideoLists()?.get(position)
+                Lg.debug(tag, "item position : $position , $mCurrentTag , ${get?.title}")
                 holder.itemView.text_title.text = get?.title
                 holder.itemView.text_date.text = get?.dateModify
             }
 
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+                val resId = if(mCurrentTag == MediaTag.MUSIC) R.layout.item_music else R.layout.item_music
                 return ViewHolder(
                     LayoutInflater.from(BaseApp.instance.applicationContext).inflate(
-                        R.layout.item_music,
+                        resId,
                         parent,
                         false
                     )
