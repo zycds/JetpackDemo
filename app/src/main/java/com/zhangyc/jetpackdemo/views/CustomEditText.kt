@@ -11,11 +11,11 @@ import androidx.appcompat.widget.AppCompatEditText
 
 class CustomEditText : AppCompatEditText, TextWatcher {
 
-    private var hasFoucus : Boolean? = null
+    private var hasFocused : Boolean? = null
 
     constructor(context: Context?) : this(context, null)
 
-    constructor(context: Context?, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
+    constructor(context: Context?, attributeSet: AttributeSet?) : this(context, attributeSet, android.R.attr.editTextStyle)
 
     constructor(context: Context?, attributeSet: AttributeSet?, defStyleAttr: Int) : super(
         context,
@@ -46,7 +46,7 @@ class CustomEditText : AppCompatEditText, TextWatcher {
 
     override fun onFocusChanged(focused: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
         super.onFocusChanged(focused, direction, previouslyFocusedRect)
-        this.hasFoucus = focused
+        this.hasFocused = focused
         setImageVisible(focused && (text?.length!! > 0))
     }
 
@@ -60,10 +60,6 @@ class CustomEditText : AppCompatEditText, TextWatcher {
 
     override fun onTextChanged(text: CharSequence?, start: Int, lengthBefore: Int, lengthAfter: Int) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter)
-    }
-
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        return super.onTouchEvent(event)
     }
 
     private fun setImageVisible(visibility : Boolean){

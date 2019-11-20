@@ -48,41 +48,48 @@ interface MainFragmentContact {
         }
 
         override fun deAttachView() {
-            mStopTimer = true
-            Lg.debug(tag, "deAttachView....")
-            if (mTimerDisposable != null && mTimerDisposable!!.isDisposed)mTimerDisposable?.dispose()
             if (mSubscribe != null && mSubscribe!!.isDisposed)mSubscribe?.dispose()
             if (mSubscribe2 != null && mSubscribe2!!.isDisposed) mSubscribe2?.dispose()
             mSubscribe = null
             mSubscribe2 = null
-            mTimerDisposable = null
+            disposeTimer()
         }
 
 
         fun requestBanners(){
-            Lg.debug(tag, "requestBanners...")
             mSubscribe = HttpApi.instance.getBanners()
                 .subscribe({
                     val mutableList = it as MutableList<Entities.Banner>
                     (iMainView.getViewPager().adapter as MainViewPagerAdapter).setData(mutableList)
-                    mTimerDisposable = RxTimer.instance.interval(
-                        (iMainView as MainFragment).activity as MainActivity,
-                        2,
-                        TimeUnit.SECONDS,
-                        Long.MAX_VALUE )
-                        .compose(RxHelper.handlerResultIO())
-                        .takeWhile {
-                            Lg.debug(tag, "stop timer : $mStopTimer")
-                            !mStopTimer
-                        }
-                        .subscribe {
-                            Lg.debug(tag, "currentItem : ${iMainView.getViewPager().currentItem}")
-                            iMainView.getViewPager().currentItem ++
-                        }
+                    timerViewPager()
                 }, {
                     ToastUtil.showShortToast(App.instance.applicationContext, "it : $it")
                 })
 
+        }
+
+        fun timerViewPager() {
+            if (mTimerDisposable != null) return
+            mStopTimer = false
+            mTimerDisposable = RxTimer.instance.interval(
+                (iMainView as MainFragment).activity as MainActivity,
+                2,
+                TimeUnit.SECONDS,
+                Long.MAX_VALUE )
+                .compose(RxHelper.handlerResultIO())
+                .takeWhile {
+                    !mStopTimer
+                }
+                .subscribe {
+                    Lg.debug(tag, "currentItem : ${iMainView.getViewPager().currentItem}")
+                    iMainView.getViewPager().currentItem ++
+                }
+        }
+
+        fun disposeTimer() {
+            mStopTimer = true
+            if (mTimerDisposable != null && mTimerDisposable!!.isDisposed)mTimerDisposable?.dispose()
+            mTimerDisposable = null
         }
 
         fun requestPublicAddressList() {

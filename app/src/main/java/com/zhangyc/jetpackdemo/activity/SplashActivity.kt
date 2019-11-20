@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
-import com.bumptech.glide.Glide
+import com.zhangyc.imageloader.ImageLoader
 import com.zhangyc.jetpackdemo.R
 import com.zhangyc.library.annotations.InjectPresenter
 import com.zhangyc.jetpackdemo.entities.Entities
@@ -35,7 +35,6 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
     lateinit var mPresenter: SplashContact.SplashPresenter
 
     private val nameObservable = Observer<String> {
-
         Log.d(loggerTag, "nameObservable : $it")
     }
 
@@ -60,7 +59,8 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
     }
 
     override fun refreshData() {
-        Glide.with(this).load(url).into(getImageView())
+        ImageLoader.instance.with(this).load(url).into(getImageView())
+//        Glide.with(this).load(url).into(getImageView())
     }
 
     override fun resume() {

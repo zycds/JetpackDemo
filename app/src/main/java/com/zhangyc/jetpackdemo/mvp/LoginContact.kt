@@ -8,7 +8,8 @@ import com.zhangyc.library.mvp.IBasePresenter
 import com.zhangyc.library.mvp.IBaseView
 import io.reactivex.disposables.Disposable
 import com.zhangyc.jetpackdemo.R
-import com.zhangyc.library.SocketClient
+import com.zhangyc.jetpackdemo.entities.Entities
+import com.zhangyc.jetpackdemo.room.AppDataBase
 
 
 interface LoginContact {
@@ -34,10 +35,12 @@ interface LoginContact {
         }
 
         fun login() {
-            SocketClient.connect()
             mSubscribe = HttpApi.instance.login(iLoginView.getUserName(), iLoginView.getPassword())
                 .subscribe({
-                    SocketClient.sendMsg("client send msg.")
+                    val user = Entities.User()
+                    user.username = iLoginView.getUserName()
+                    user.password = iLoginView.getPassword()
+                    checkUserInsert(user)
                     NavHostFragment.findNavController(iLoginView.getCurrentFragment()).navigate(R.id.action_loginFragment_to_mainFragment)
                 }, {
                     ToastUtil.showShortToast(iLoginView.getActivityContext()!!, "it : ${it.localizedMessage}")
@@ -48,6 +51,19 @@ interface LoginContact {
 
         }
 
+        private fun checkUserInsert(user : Entities.User) : Boolean {
+            val userDao = AppDataBase.getDBInstance().getUserDao()
+            val allUsers = userDao.getAllUsers()
+            var flag = true
+            for (u in allUsers) {
+                if (user.username == u.username) {
+                    flag = false
+                    break
+                }
+            }
+            if (flag)  AppDataBase.getDBInstance().getUserDao().insert(user)
+            return flag
+        }
     }
 
 }

@@ -48,5 +48,6 @@ dependencies {
     kapt 'android.arch.persistence.room:compiler:1.1.1'
     kapt 'com.alibaba:arouter-compiler:1.2.1'
     implementation project(path: ':library')
+    implementation project(path: ':imageloader')
     if (!rootProject.ext.mediaIsModule) implementation project(path : ':media_player')
 }

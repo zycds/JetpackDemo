@@ -58,7 +58,18 @@ class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), 
     }
 
     override fun getViewPager(): ViewPager {
-        if (viewPager_main.adapter == null) viewPager_main.adapter = MainViewPagerAdapter()
+        if (viewPager_main.adapter == null) {
+            viewPager_main.adapter = MainViewPagerAdapter()
+            viewPager_main.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+                override fun onPageScrollStateChanged(state: Int) {
+                    Lg.debug(bTag, "state : $state")
+                    if(state == ViewPager.SCROLL_STATE_DRAGGING) mPresenter.disposeTimer()
+                    if (state == ViewPager.SCROLL_STATE_IDLE) mPresenter.timerViewPager()
+                }
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) { }
+                override fun onPageSelected(position: Int) { }
+            })
+        }
         return viewPager_main
     }
 
@@ -105,7 +116,6 @@ class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), 
     }
 
     override fun onRefresh() {
-        Lg.debug(bTag, "onRefresh.")
         mPresenter.requestPublicAddressList()
     }
 
