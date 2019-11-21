@@ -31,24 +31,30 @@ class ImageRequest(builder: Builder) : Request(){
             mBuilder.cacheDisk ->RequestHelper.instance.getDisk(mBuilder.url)?.let{
                 Log.d(ImageLoader.tag, "use sdcard cache...")
                 Handler(Looper.getMainLooper()).post { mBuilder.imageView?.setImageBitmap(it) }
+                return
             }
             mBuilder.resDefaultId != 0 -> Handler(Looper.getMainLooper()).post { mBuilder.imageView?.setImageResource(mBuilder.resDefaultId) }
         }
-        val openConnection = URL(mBuilder.url).openConnection()
-        val conn = if (!mBuilder.https) openConnection as HttpURLConnection else openConnection as HttpsURLConnection
-        conn.connectTimeout = mBuilder.timeOut
-        conn.requestMethod = mBuilder.httpReqMethod.method
-        conn.doInput = true
-        conn.doOutput = true
-        if (conn.responseCode == 200) {
-            val decodeStream = BitmapFactory.decodeStream(conn.inputStream)
-            conn.disconnect()
+        Log.d(ImageLoader.tag, "url : ${mBuilder.url}, ${mBuilder.httpReqMethod.method} , ${mBuilder.timeOut}")
+
+        val openConnection = if (mBuilder.https) URL(mBuilder.url).openConnection() as HttpsURLConnection else URL(mBuilder.url).openConnection() as HttpURLConnection
+        if (mBuilder.https)  {
+            HTTPSTrustManager.allowAllSSL()
+        }
+        openConnection.connectTimeout = mBuilder.timeOut
+        openConnection.requestMethod = mBuilder.httpReqMethod.method
+        openConnection.readTimeout = mBuilder.timeOut
+        openConnection.doInput = true
+//        openConnection.doOutput = true
+        openConnection.connect()
+        Log.e(ImageLoader.tag, "responseCode : ${openConnection.responseCode}, ${openConnection.responseMessage}, ${openConnection.requestMethod} ")
+        if (openConnection.responseCode == 200) {
+            val decodeStream = BitmapFactory.decodeStream(openConnection.inputStream)
             Handler(Looper.getMainLooper()).post { mBuilder.imageView?.setImageBitmap(decodeStream) }
             RequestHelper.instance.put(mBuilder.url, decodeStream)
             if (mBuilder.cacheDisk) RequestHelper.instance.cacheDisk(mBuilder.url, decodeStream)
-        } else {
-            Log.e(ImageLoader.tag, "responseCode : ${conn.responseCode}, ${conn.responseMessage}")
         }
+        openConnection.disconnect()
     }
 
     override fun buildRequest(builder : Request.Builder): Request {

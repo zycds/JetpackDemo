@@ -39,6 +39,7 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
     }
 
     private val url = "http://b-ssl.duitang.com/uploads/item/201209/07/20120907181244_tGiNN.jpeg"
+//    private val url = "https://www.wanandroid.com/blogimgs/4f70771f-2d7a-4494-b9fd-0d11eca0bd6e.png"
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     override fun init() {
@@ -59,7 +60,7 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
     }
 
     override fun refreshData() {
-        ImageLoader.instance.with(this).load(url).into(getImageView())
+        ImageLoader.instance.with(this).load(url).default(R.mipmap.logo).into(getImageView())
 //        Glide.with(this).load(url).into(getImageView())
     }
 
@@ -77,7 +78,7 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
                 Lg.info(tag, "user : ${user.username}")
             }
             if (allUsers.size > 0) it.onNext(allUsers[0]) else  it.onError(Throwable("please register..."))
-        }, 2, TimeUnit.SECONDS).subscribe({
+        }, 5, TimeUnit.SECONDS).subscribe({
             ARouter.getInstance().build(RouterConstants.ACTIVITY_URL_MAIN).withString("username", it.username)
                 .withString("password", it.password).navigation()
             finish()

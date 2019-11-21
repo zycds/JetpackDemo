@@ -22,6 +22,7 @@ class ImageLoader {
 
     fun load(url : String) : ImageLoader{
         checkBuilder().url = url
+        if (url.contains("https://")) checkBuilder().https = true
         return this
     }
 
