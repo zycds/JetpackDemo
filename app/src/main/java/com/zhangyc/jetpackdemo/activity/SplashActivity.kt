@@ -61,12 +61,14 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
 
     override fun refreshData() {
         ImageLoader.instance.with(this).load(url).default(R.mipmap.logo).into(getImageView())
+//        ImageLoader.instance.with(this).loadFile(File("/sdcard/logo.jpg")).into(getImageView())
 //        Glide.with(this).load(url).into(getImageView())
     }
 
     override fun resume() {
         super.resume()
-        initSplash()
+//        initSplash()
+        ARouter.getInstance().build(RouterConstants.ACTIVITY_URL_X5WEB).navigation()
     }
 
     @SuppressLint("CheckResult")

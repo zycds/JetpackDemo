@@ -61,5 +61,21 @@ class RequestHelper : ImageCache{
         return bitmap
     }
 
+    fun getLocalBitmap(file : File, reqW : Int, reqH : Int) : Bitmap? {
+        return getLocalBitmap(file.path, reqW, reqH)
+    }
+
+    fun getLocalBitmap(filePath : String, reqW : Int, reqH : Int) : Bitmap? {
+        if (!File(filePath).exists()) return null
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(filePath, options)
+        val wRatio = if (reqW > 0) options.outWidth / reqW else 1
+        val hRatio = if (reqW > 0) options.outHeight / reqH else 1
+        val ratio = if (wRatio > hRatio) hRatio else wRatio
+        options.inSampleSize = ratio
+        options.inJustDecodeBounds = false
+        return BitmapFactory.decodeFile(filePath, options)
+    }
 
 }

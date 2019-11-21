@@ -1,10 +1,12 @@
 package com.zhangyc.imageloader
 
 import android.graphics.BitmapFactory
+import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.ImageView
+import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
@@ -18,25 +20,47 @@ class ImageRequest(builder: Builder) : Request(){
     private var mBuilder: Builder = builder
 
     override fun run() {
+        if(loadLocal()) return
+        request()
+    }
+
+    override fun buildRequest(builder : Request.Builder): Request {
+        return ImageRequest(builder as Builder)
+    }
+
+    private fun loadLocal() : Boolean {
         when {
             mBuilder.resId !=0 -> {
                 mBuilder.imageView?.setImageResource(mBuilder.resId)
-                return
+                return true
+            }
+            mBuilder.file != null -> {
+                RequestHelper.instance.getLocalBitmap(mBuilder.file!!, mBuilder.imageView?.width!!, mBuilder.imageView?.height!!)?.let {
+                    mBuilder.imageView?.setImageBitmap(it) }
+                return true
+            }
+            mBuilder.filePath != null -> {
+                RequestHelper.instance.getLocalBitmap(mBuilder.filePath!!, mBuilder.imageView?.width!!, mBuilder.imageView?.height!!)?.let {
+                    mBuilder.imageView?.setImageBitmap(it) }
+                return true
             }
             RequestHelper.instance.get(mBuilder.url) != null -> {
                 Log.d(ImageLoader.tag, "use memory cache...")
                 Handler(Looper.getMainLooper()).post { mBuilder.imageView?.setImageBitmap(RequestHelper.instance.get(mBuilder.url)) }
-                return
+                return true
             }
             mBuilder.cacheDisk ->RequestHelper.instance.getDisk(mBuilder.url)?.let{
                 Log.d(ImageLoader.tag, "use sdcard cache...")
                 Handler(Looper.getMainLooper()).post { mBuilder.imageView?.setImageBitmap(it) }
-                return
+                return true
             }
-            mBuilder.resDefaultId != 0 -> Handler(Looper.getMainLooper()).post { mBuilder.imageView?.setImageResource(mBuilder.resDefaultId) }
         }
-        Log.d(ImageLoader.tag, "url : ${mBuilder.url}, ${mBuilder.httpReqMethod.method} , ${mBuilder.timeOut}")
+        return false
+    }
 
+    private fun request() {
+        Log.d(ImageLoader.tag, "url : ${mBuilder.url}, ${mBuilder.httpReqMethod.method} , ${mBuilder.timeOut}")
+        if(mBuilder.resDefaultId != 0) Handler(Looper.getMainLooper()).post { mBuilder.imageView?.setImageResource(mBuilder.resDefaultId) }
         val openConnection = if (mBuilder.https) URL(mBuilder.url).openConnection() as HttpsURLConnection else URL(mBuilder.url).openConnection() as HttpURLConnection
         if (mBuilder.https)  {
             HTTPSTrustManager.allowAllSSL()
@@ -49,16 +73,14 @@ class ImageRequest(builder: Builder) : Request(){
         openConnection.connect()
         Log.e(ImageLoader.tag, "responseCode : ${openConnection.responseCode}, ${openConnection.responseMessage}, ${openConnection.requestMethod} ")
         if (openConnection.responseCode == 200) {
-            val decodeStream = BitmapFactory.decodeStream(openConnection.inputStream)
-            Handler(Looper.getMainLooper()).post { mBuilder.imageView?.setImageBitmap(decodeStream) }
-            RequestHelper.instance.put(mBuilder.url, decodeStream)
-            if (mBuilder.cacheDisk) RequestHelper.instance.cacheDisk(mBuilder.url, decodeStream)
+            val rect = Rect(0, 0, (mBuilder.imageView?.width ?: 100), (mBuilder.imageView?.height ?: 100))
+            val bmp = BitmapFactory.decodeStream(openConnection.inputStream, rect, BitmapFactory.Options())
+            Log.d(ImageLoader.tag, "bitmap : $bmp")
+            Handler(Looper.getMainLooper()).post { mBuilder.imageView?.setImageBitmap(bmp) }
+            bmp?.let { RequestHelper.instance.put(mBuilder.url, it) }
+            if (mBuilder.cacheDisk) bmp?.let { RequestHelper.instance.cacheDisk(mBuilder.url, it) }
         }
         openConnection.disconnect()
-    }
-
-    override fun buildRequest(builder : Request.Builder): Request {
-        return ImageRequest(builder as Builder)
     }
 
     enum class HttpReqMethod(val method: String) {
@@ -74,6 +96,8 @@ class ImageRequest(builder: Builder) : Request(){
         var resDefaultId : Int = 0
         var cacheDisk : Boolean = false
         var resId : Int = 0
+        var file : File? = null
+        var filePath : String? = null
     }
 
 }

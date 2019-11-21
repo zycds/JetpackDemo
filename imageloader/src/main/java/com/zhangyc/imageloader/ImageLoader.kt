@@ -26,6 +26,16 @@ class ImageLoader {
         return this
     }
 
+    fun loadFile(filePath : String) : ImageLoader {
+        checkBuilder().filePath = filePath
+        return this
+    }
+
+    fun loadFile(file : File) : ImageLoader {
+        checkBuilder().file = file
+        return this
+    }
+
     fun load(resId : Int) : ImageLoader{
         checkBuilder().resId = resId
         return this

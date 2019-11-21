@@ -2,14 +2,17 @@ package com.zhangyc.jetpackdemo.activity
 
 import android.content.Context
 import android.widget.LinearLayout
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.tencent.smtt.sdk.TbsReaderView
 import com.zhangyc.jetpackdemo.R
 import com.zhangyc.library.annotations.InjectPresenter
 import com.zhangyc.jetpackdemo.mvp.X5WebViewContact
+import com.zhangyc.library.RouterConstants
 import com.zhangyc.library.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_x5.*
 import java.io.File
 
+@Route(path = RouterConstants.ACTIVITY_URL_X5WEB)
 class X5WebViewActivity : BaseActivity<X5WebViewContact.X5Presenter>(), X5WebViewContact.IX5WebView, TbsReaderView.ReaderCallback {
 
     @InjectPresenter
