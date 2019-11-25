@@ -23,7 +23,6 @@ abstract class BaseApp : Application() {
         ARouter.init(this)
         registerAllReceiver()
     }
-
     override fun onTerminate() {
         super.onTerminate()
         ARouter.getInstance().destroy()

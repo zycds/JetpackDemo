@@ -45,13 +45,8 @@ class ImageRequest(builder: Builder) : Request(){
                 return true
             }
             RequestHelper.instance.get(mBuilder.url) != null -> {
-                Log.d(ImageLoader.tag, "use memory cache...")
+                Log.d(ImageLoader.tag, "use cache...")
                 Handler(Looper.getMainLooper()).post { mBuilder.imageView?.setImageBitmap(RequestHelper.instance.get(mBuilder.url)) }
-                return true
-            }
-            mBuilder.cacheDisk ->RequestHelper.instance.getDisk(mBuilder.url)?.let{
-                Log.d(ImageLoader.tag, "use sdcard cache...")
-                Handler(Looper.getMainLooper()).post { mBuilder.imageView?.setImageBitmap(it) }
                 return true
             }
         }
@@ -77,8 +72,7 @@ class ImageRequest(builder: Builder) : Request(){
             val bmp = BitmapFactory.decodeStream(openConnection.inputStream, rect, BitmapFactory.Options())
             Log.d(ImageLoader.tag, "bitmap : $bmp")
             Handler(Looper.getMainLooper()).post { mBuilder.imageView?.setImageBitmap(bmp) }
-            bmp?.let { RequestHelper.instance.put(mBuilder.url, it) }
-            if (mBuilder.cacheDisk) bmp?.let { RequestHelper.instance.cacheDisk(mBuilder.url, it) }
+            bmp?.let { RequestHelper.instance.put(mBuilder.url, it, mBuilder.cacheDisk) }
         }
         openConnection.disconnect()
     }

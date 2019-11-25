@@ -24,12 +24,11 @@ class X5WebViewActivity : BaseActivity<X5WebViewContact.X5Presenter>(), X5WebVie
         setContentView(R.layout.activity_x5)
         tbsReaderView = TbsReaderView(this, this)
         layout_content_x5.addView(tbsReaderView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-
     }
 
 
     override fun initData() {
-        val file = File("/sdcard/c.pdf")
+        val file = File("/sdcard/a.docx")
         mPresenter.displayFile(file)
     }
 
@@ -44,7 +43,9 @@ class X5WebViewActivity : BaseActivity<X5WebViewContact.X5Presenter>(), X5WebVie
     }
 
     override fun back(): Boolean {
-        return false
+        getTbsReaderView().onStop()
+        finish()
+        return true
     }
 
     override fun onCallBackAction(p0: Int?, p1: Any?, p2: Any?) {

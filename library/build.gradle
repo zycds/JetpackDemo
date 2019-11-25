@@ -16,6 +16,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
+
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86", "mips", "x86_64"
+        }
     }
 
     buildTypes {
@@ -29,6 +33,7 @@ android {
         targetCompatibility = '1.8'
     }
 
+    sourceSets { main { jniLibs.srcDirs = ['jniLibs'] } }
 }
 
 dependencies {

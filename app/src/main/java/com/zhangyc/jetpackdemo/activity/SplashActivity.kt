@@ -67,8 +67,8 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
 
     override fun resume() {
         super.resume()
-//        initSplash()
-        ARouter.getInstance().build(RouterConstants.ACTIVITY_URL_X5WEB).navigation()
+        initSplash()
+//        ARouter.getInstance().build(RouterConstants.ACTIVITY_URL_X5WEB).navigation()
     }
 
     @SuppressLint("CheckResult")
