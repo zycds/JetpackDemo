@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/navigation_media" app:startDestination="@id/mediaContainerFragment">
+            android:id="@+id/navigation_media" app:startDestination="@id/mainFragment">
 
     <fragment android:id="@+id/musicFragment" android:name="com.zhangyc.media_player.fragment.MusicFragment"
               android:label="MusicFragment">
@@ -23,6 +23,11 @@
     <fragment android:id="@+id/picFragment" android:name="com.zhangyc.media_player.fragment.PicFragment"
               android:label="PicFragment">
         <action android:id="@+id/action_picFragment_to_mediaContainerFragment"
+                app:destination="@id/mediaContainerFragment"/>
+    </fragment>
+    <fragment android:id="@+id/mainFragment" android:name="com.zhangyc.media_player.fragment.MainFragment"
+              android:label="MainFragment">
+        <action android:id="@+id/action_mainFragment_to_mediaContainerFragment"
                 app:destination="@id/mediaContainerFragment"/>
     </fragment>
 </navigation>

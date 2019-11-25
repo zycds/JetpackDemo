@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:itemMenu="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <com.zhangyc.library.views.RotateMenu android:layout_width="match_parent"
+                                          android:layout_height="match_parent">
+
+        <com.zhangyc.library.views.ItemMenu android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            itemMenu:coordinateDefaultX="10"
+                                            itemMenu:coordinateDefaultY="20"
+                                            itemMenu:coordinateX="10"
+                                            itemMenu:coordinateY="20">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textColor="@android:color/black"
+                      android:textSize="20sp"
+                      android:text="AAA"/>
+        </com.zhangyc.library.views.ItemMenu>
+
+        <com.zhangyc.library.views.ItemMenu android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            itemMenu:coordinateDefaultX="150"
+                                            itemMenu:coordinateDefaultY="60"
+                                            itemMenu:coordinateX="150"
+                                            itemMenu:coordinateY="60">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textColor="@android:color/black"
+                      android:textSize="20sp"
+                      android:text="BBB"/>
+        </com.zhangyc.library.views.ItemMenu>
+
+        <com.zhangyc.library.views.ItemMenu android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            itemMenu:coordinateDefaultX="300"
+                                            itemMenu:coordinateDefaultY="180"
+                                            itemMenu:coordinateX="300"
+                                            itemMenu:coordinateY="180">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textColor="@android:color/black"
+                      android:textSize="20sp"
+                      android:text="CCC"/>
+        </com.zhangyc.library.views.ItemMenu>
+
+        <com.zhangyc.library.views.ItemMenu android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            itemMenu:coordinateDefaultX="180"
+                                            itemMenu:coordinateDefaultY="340"
+                                            itemMenu:coordinateX="180"
+                                            itemMenu:coordinateY="340">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textColor="@android:color/black"
+                      android:textSize="20sp"
+                      android:text="CCC"/>
+        </com.zhangyc.library.views.ItemMenu>
+
+        <com.zhangyc.library.views.ItemMenu android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            itemMenu:coordinateDefaultX="10"
+                                            itemMenu:coordinateDefaultY="420"
+                                            itemMenu:coordinateX="10"
+                                            itemMenu:coordinateY="420">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textColor="@android:color/black"
+                      android:textSize="20sp"
+                      android:text="CCC"/>
+        </com.zhangyc.library.views.ItemMenu>
+
+    </com.zhangyc.library.views.RotateMenu>
+
+</LinearLayout>
