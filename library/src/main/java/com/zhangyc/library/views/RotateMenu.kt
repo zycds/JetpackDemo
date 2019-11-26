@@ -12,11 +12,13 @@ class RotateMenu : RelativeLayout {
 
     companion object {
         val TAG = RotateMenu::class.java.simpleName
-        const val MOVE_STEP = 100
+        const val MOVE_STEP = 300f
     }
 
     private var downX: Float = 0f
     private var downY: Float = 0f
+    private var downTime: Long = 0
+    private val clickSpaceTime = 500
     private var per = 0f
 
     private var coordinatorsX: IntArray? = null
@@ -25,9 +27,19 @@ class RotateMenu : RelativeLayout {
     private var provY: Int = 0
 
     private var currentArea = DOWNAREA.DEFAULT
+    private var currentOrientation = ORIENTATION.DEFAULT
+
+    private var isSingleClick = true
+    private var isLongTouch = true
+    private var isDoubleClick = false
+
 
     private enum class DOWNAREA {
         DEFAULT, LEFT_TOP, RIGHT_TOP, LEFT_BOTTOM, RIGHT_BOTTOM
+    }
+
+    private enum class ORIENTATION {
+        DEFAULT, ANTICLOCKWISE, CLOCKWISE
     }
 
     constructor(context: Context) : this(context, null)
@@ -75,18 +87,20 @@ class RotateMenu : RelativeLayout {
         if (childCount > 0) {
             for (index in 0 until childCount) {
                 val itemMenu = getChildAt(index) as ItemMenu
+                var x = itemMenu.coordinateX
+                var y = itemMenu.coordinateY
                 if (itemMenu.next != null) {
-                    val minusX = Math.abs(itemMenu.next?.coordinateX?.minus(itemMenu.coordinateX)!!)
-                    val minusY = Math.abs(itemMenu.next?.coordinateY?.minus(itemMenu.coordinateY)!!)
-                    itemMenu.coordinateX = minusX.times(per).toInt().plus(itemMenu.coordinateDefaultX)
-                    itemMenu.coordinateY = minusY.times(per).toInt().plus(itemMenu.coordinateDefaultY)
+                    val minusX = itemMenu.next?.coordinateX?.minus(itemMenu.coordinateX)!!
+                    val minusY = itemMenu.next?.coordinateY?.minus(itemMenu.coordinateY)!!
+                    x = minusX.times(per).toInt().plus(itemMenu.coordinateDefaultX)
+                    y = minusY.times(per).toInt().plus(itemMenu.coordinateDefaultY)
                 }
                 Log.d(TAG, "onLayout coordinateX :${itemMenu.coordinateX}, coordinateY : ${itemMenu.coordinateY}")
                 itemMenu.layout(
-                    itemMenu.coordinateX,
-                    itemMenu.coordinateY,
-                    itemMenu.coordinateX + itemMenu.measuredWidth,
-                    itemMenu.coordinateY + itemMenu.measuredHeight
+                    x,
+                    y,
+                    x + itemMenu.measuredWidth,
+                    y + itemMenu.measuredHeight
                 )
             }
         }
@@ -95,39 +109,25 @@ class RotateMenu : RelativeLayout {
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
+                downTime = System.currentTimeMillis()
                 downX = event.x
                 downY = event.y
                 currentArea = getCurrentArea(downX, downY)
             }
             MotionEvent.ACTION_MOVE -> {
+                isSingleClick(event.x, event.y)
                 val currentArea1 = getCurrentArea(event.x, event.y)
                 if (currentArea1 != currentArea) {
-                    downX = event.x
-                    downY = event.y
+//                    downX = event.x
+//                    downY = event.y
                     currentArea = currentArea1
                 }
-
-                per = (Math.abs(event.y - downY) / 100f + Math.abs(event.x - downX) / 100f) / 2
-                when(currentArea) {
-                    DOWNAREA.LEFT_TOP->{
-                        if (event.x > downX) {
-
-                        }
-                    }
-                    DOWNAREA.LEFT_BOTTOM->{
-
-                    }
-                    DOWNAREA.RIGHT_TOP->{
-
-                    }
-                    DOWNAREA.RIGHT_BOTTOM->{
-
-                    }
-                    DOWNAREA.DEFAULT->{
-
-                    }
+                per = (Math.abs(event.y - downY) / MOVE_STEP + Math.abs(event.x - downX) / MOVE_STEP) / 2
+                val orientation = getOrientation(event.x)
+                if (currentOrientation != ORIENTATION.DEFAULT && currentOrientation != orientation) {
+                    Log.d(TAG, "orientation : $orientation, currentOrientation : $currentOrientation")
                 }
-
+                currentOrientation = orientation
                 if (per >= 1f) {
                     setCoordinateDefault()
                     per = 0f
@@ -135,14 +135,15 @@ class RotateMenu : RelativeLayout {
                 requestLayout()
             }
             MotionEvent.ACTION_UP -> {
-
+                Log.d(TAG, "isSingleClick : $isSingleClick")
+                if (isSingleClick) return super.onTouchEvent(event)
             }
         }
         return true
     }
 
     private fun getCurrentArea(x: Float, y: Float): DOWNAREA {
-        var area : DOWNAREA = DOWNAREA.DEFAULT
+        var area: DOWNAREA = DOWNAREA.DEFAULT
         if (x > provX && y > provY) {
             area = DOWNAREA.RIGHT_BOTTOM
         } else if (x > provX && y <= provY) {
@@ -153,6 +154,36 @@ class RotateMenu : RelativeLayout {
             area = DOWNAREA.LEFT_TOP
         }
         return area
+    }
+
+    private fun getOrientation(x: Float): ORIENTATION {
+        var orientation = ORIENTATION.DEFAULT
+        when (currentArea) {
+            DOWNAREA.LEFT_TOP -> {
+                orientation = if (x > downX) ORIENTATION.CLOCKWISE else ORIENTATION.ANTICLOCKWISE
+            }
+            DOWNAREA.LEFT_BOTTOM -> {
+                orientation = if (x > downX) ORIENTATION.ANTICLOCKWISE else ORIENTATION.CLOCKWISE
+            }
+            DOWNAREA.RIGHT_TOP -> {
+                orientation = if (x > downX) ORIENTATION.CLOCKWISE else ORIENTATION.ANTICLOCKWISE
+            }
+            DOWNAREA.RIGHT_BOTTOM -> {
+                orientation = if (x > downX) ORIENTATION.ANTICLOCKWISE else ORIENTATION.CLOCKWISE
+            }
+            DOWNAREA.DEFAULT -> {
+                orientation = ORIENTATION.DEFAULT
+            }
+        }
+        return orientation
+    }
+
+    private fun isSingleClick(x: Float, y: Float): Boolean {
+        if (isSingleClick) {
+            if ((Math.abs(x - downX) > 30 || Math.abs(y - downY) > 30) && (System.currentTimeMillis() - downTime < clickSpaceTime)) isSingleClick =
+                false
+        }
+        return isSingleClick
     }
 
     private fun setCoordinateDefault() {

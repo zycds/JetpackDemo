@@ -53,7 +53,7 @@
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:textColor="@android:color/black"
                       android:textSize="20sp"
-                      android:text="CCC"/>
+                      android:text="DDD"/>
         </com.zhangyc.library.views.ItemMenu>
 
         <com.zhangyc.library.views.ItemMenu android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:textColor="@android:color/black"
                       android:textSize="20sp"
-                      android:text="CCC"/>
+                      android:text="FFF"/>
         </com.zhangyc.library.views.ItemMenu>
 
     </com.zhangyc.library.views.RotateMenu>
