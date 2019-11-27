@@ -27,20 +27,20 @@ interface MainFragmentContact {
     }
 
     interface IMainFragmentView : IBaseView {
-        fun getCurrentFragment() : Fragment
-        fun getViewPager() : ViewPager
-        fun getRecyclerView() : RecyclerView
-        fun getSwipeRefreshLayout() : SwipeRefreshLayout
+        fun getCurrentFragment(): Fragment
+        fun getViewPager(): ViewPager
+        fun getRecyclerView(): RecyclerView
+        fun getSwipeRefreshLayout(): SwipeRefreshLayout
     }
 
     class MainFragmentPresenter : IBasePresenter {
 
-        private lateinit var iMainView : IMainFragmentView
+        private lateinit var iMainView: IMainFragmentView
         private var mStopTimer = false
 
-        private var mSubscribe : Disposable? = null
-        private var mSubscribe2 : Disposable? = null
-        private var mTimerDisposable : Disposable? = null
+        private var mSubscribe: Disposable? = null
+        private var mSubscribe2: Disposable? = null
+        private var mTimerDisposable: Disposable? = null
 
 
         override fun <V : IBaseView> attachView(v: V) {
@@ -48,7 +48,7 @@ interface MainFragmentContact {
         }
 
         override fun deAttachView() {
-            if (mSubscribe != null && mSubscribe!!.isDisposed)mSubscribe?.dispose()
+            if (mSubscribe != null && mSubscribe!!.isDisposed) mSubscribe?.dispose()
             if (mSubscribe2 != null && mSubscribe2!!.isDisposed) mSubscribe2?.dispose()
             mSubscribe = null
             mSubscribe2 = null
@@ -56,7 +56,7 @@ interface MainFragmentContact {
         }
 
 
-        fun requestBanners(){
+        fun requestBanners() {
             mSubscribe = HttpApi.instance.getBanners()
                 .subscribe({
                     val mutableList = it as MutableList<Entities.Banner>
@@ -69,27 +69,38 @@ interface MainFragmentContact {
         }
 
         fun timerViewPager() {
-            if (mTimerDisposable != null) return
-            mStopTimer = false
-            mTimerDisposable = RxTimer.instance.interval(
-                (iMainView as MainFragment).activity as MainActivity,
-                2,
-                TimeUnit.SECONDS,
-                Long.MAX_VALUE )
-                .compose(RxHelper.handlerResultIO())
-                .takeWhile {
-                    !mStopTimer
+            synchronized(MainFragmentPresenter::class.java) {
+                if (mTimerDisposable == null) {
+                    mStopTimer = false
+                    mTimerDisposable = RxTimer.instance.interval(
+                        (iMainView as MainFragment).activity as MainActivity,
+                        2,
+                        TimeUnit.SECONDS,
+                        Long.MAX_VALUE
+                    )
+                        .compose(RxHelper.handlerResultIO())
+                        .takeWhile {
+                            !mStopTimer
+                        }
+                        .subscribe {
+                            Lg.debug(tag, "currentItem : ${iMainView.getViewPager().currentItem}")
+                            iMainView.getViewPager().currentItem++
+                        }
                 }
-                .subscribe {
-                    Lg.debug(tag, "currentItem : ${iMainView.getViewPager().currentItem}")
-                    iMainView.getViewPager().currentItem ++
-                }
+            }
+
         }
 
         fun disposeTimer() {
-            mStopTimer = true
-            if (mTimerDisposable != null && mTimerDisposable!!.isDisposed)mTimerDisposable?.dispose()
-            mTimerDisposable = null
+            synchronized(MainFragmentPresenter::class.java) {
+                Lg.debug(tag, "disposeTimer dispose...${mTimerDisposable?.isDisposed}")
+                if (!mTimerDisposable?.isDisposed!!) {
+                    mTimerDisposable?.dispose()
+                    Lg.debug(tag, "mTimerDisposable dispose...")
+                }
+                mStopTimer = true
+                mTimerDisposable = null
+            }
         }
 
         fun requestPublicAddressList() {

@@ -5,7 +5,8 @@
 
 
     <application tools:ignore="GoogleAppIndexingWarning,MissingApplicationIcon">
-        <activity android:name=".media_activity.MediaActivity" />
+        <activity android:name=".media_activity.MediaActivity"
+                android:configChanges="screenSize|orientation|keyboardHidden"/>
         <service android:name=".service.MusicService"/>
     </application>
 

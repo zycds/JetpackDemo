@@ -24,8 +24,6 @@ class MusicService : Service() {
 
     inner class MusicBinder : Binder() {
 
-
-
         private var mediaPlayer : MediaPlayer? = null
 
         private fun initMediaPlayer(music : Music?) {

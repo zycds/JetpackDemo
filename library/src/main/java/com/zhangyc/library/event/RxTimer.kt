@@ -20,18 +20,11 @@ class RxTimer {
     }
 
     fun interval(owner : LifecycleOwner, period : Long, timeUnit : TimeUnit, stopPredicate : Long) : Observable<Long> {
-        return Observable.interval(period, timeUnit)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        return Observable.interval(0, period, timeUnit)
             .takeUntil { t ->
                 Lg.error(tag, "t $t")
                 stopPredicate == t
             }.compose(getProvider(owner)?.bindToLifecycle())
-    }
-
-    fun timerDelay (owner : LifecycleOwner, delay : Long, timeUnit: TimeUnit) : Observable<Long> {
-        return Observable.timer(delay, timeUnit).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).compose(getProvider(owner)?.bindToLifecycle())
     }
 
     fun <T> timerDelay (owner : LifecycleOwner, observable: Observable<T>, delay : Long, timeUnit: TimeUnit) : Observable<T> {

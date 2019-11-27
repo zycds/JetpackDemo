@@ -62,9 +62,12 @@ class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), 
             viewPager_main.adapter = MainViewPagerAdapter()
             viewPager_main.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
                 override fun onPageScrollStateChanged(state: Int) {
-                    Lg.debug(bTag, "state : $state")
-                    if(state == ViewPager.SCROLL_STATE_DRAGGING) mPresenter.disposeTimer()
-                    if (state == ViewPager.SCROLL_STATE_IDLE) mPresenter.timerViewPager()
+                    if(state == ViewPager.SCROLL_STATE_DRAGGING) {
+                        mPresenter.disposeTimer()
+                    }
+                    if (state == ViewPager.SCROLL_STATE_IDLE)  {
+                        mPresenter.timerViewPager()
+                    }
                 }
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) { }
                 override fun onPageSelected(position: Int) { }

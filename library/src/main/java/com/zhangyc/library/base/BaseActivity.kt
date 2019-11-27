@@ -1,5 +1,6 @@
 package com.zhangyc.library.base
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -7,6 +8,7 @@ import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
 import com.alibaba.android.arouter.launcher.ARouter
+import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.library.R
 import com.zhangyc.library.mvp.IBasePresenter
 import com.zhangyc.library.proxy.ProxyActivity
@@ -58,6 +60,21 @@ abstract class BaseActivity<P : IBasePresenter> : ProxyActivity() {
         init()
         initToolBar()
         initData()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Lg.debug(tag, "onSaveInstanceState")
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        Lg.debug(tag, "onRestoreInstanceState")
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        Lg.debug(tag, "onConfigurationChanged...${newConfig.orientation}")
     }
 
     private fun initToolBar() {
