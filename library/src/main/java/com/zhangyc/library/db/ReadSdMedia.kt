@@ -1,12 +1,15 @@
 package com.zhangyc.library.db
 
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.database.Cursor
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import com.blankj.utilcode.util.SDCardUtils
 import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.library.base.BaseApp
@@ -141,5 +144,13 @@ class ReadSdMedia {
         return mVideoLists
     }
 
+
+    fun update(context: Context) {
+        MediaScannerConnection.scanFile(context, arrayOf(Environment.getExternalStorageDirectory().path), null, object : MediaScannerConnection.OnScanCompletedListener{
+            override fun onScanCompleted(path: String?, uri: Uri?) {
+                Log.d(tag, "onScanCompleted. $path")
+            }
+        })
+    }
 
 }

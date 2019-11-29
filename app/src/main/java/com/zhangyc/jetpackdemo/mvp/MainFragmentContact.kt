@@ -1,9 +1,11 @@
 package com.zhangyc.jetpackdemo.mvp
 
+import android.os.Debug
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager.widget.ViewPager
+import com.blankj.utilcode.util.PathUtils
 import com.zhangyc.jetpackdemo.App
 import com.zhangyc.jetpackdemo.activity.MainActivity
 import com.zhangyc.jetpackdemo.adapters.MainViewPagerAdapter
@@ -69,8 +71,11 @@ interface MainFragmentContact {
         }
 
         fun timerViewPager() {
+            val tracePath = PathUtils.getExternalStoragePath().plus("/").plus(tag)
+            Lg.debug(tag, "tracePath : $tracePath")
             synchronized(MainFragmentPresenter::class.java) {
                 if (mTimerDisposable == null) {
+                    Debug.startMethodTracing(tracePath)
                     mStopTimer = false
                     mTimerDisposable = RxTimer.instance.interval(
                         (iMainView as MainFragment).activity as MainActivity,
@@ -86,9 +91,9 @@ interface MainFragmentContact {
                             Lg.debug(tag, "currentItem : ${iMainView.getViewPager().currentItem}")
                             iMainView.getViewPager().currentItem++
                         }
+                    Debug.stopMethodTracing()
                 }
             }
-
         }
 
         fun disposeTimer() {

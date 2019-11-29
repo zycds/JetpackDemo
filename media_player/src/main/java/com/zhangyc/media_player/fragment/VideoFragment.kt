@@ -58,6 +58,10 @@ class VideoFragment : BaseFragment<VideoContact.VideoPresenter>(), VideoContact.
 
     }
 
+    override fun pause() {
+        mPresenter.pause()
+    }
+
     override fun unInit() {
 
     }
@@ -68,6 +72,10 @@ class VideoFragment : BaseFragment<VideoContact.VideoPresenter>(), VideoContact.
 
     override fun getSurfaceView(): SurfaceView {
         return surfaceView
+    }
+
+    override fun getBottomSurfaceView(): SurfaceView {
+        return surfaceView2
     }
 
 }

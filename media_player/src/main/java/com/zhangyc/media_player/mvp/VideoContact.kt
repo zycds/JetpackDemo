@@ -1,9 +1,9 @@
 package com.zhangyc.media_player.mvp
 
 import android.annotation.TargetApi
+import android.graphics.PixelFormat
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Build
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -19,6 +19,7 @@ interface VideoContact {
 
     interface IVideoView : IBaseView {
         fun getSurfaceView(): SurfaceView
+        fun getBottomSurfaceView(): SurfaceView
     }
 
     class VideoPresenter : IBasePresenter, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener,
@@ -31,15 +32,26 @@ interface VideoContact {
         private var position: Int = 0
 
         private lateinit var mMediaPlayer: MediaPlayer
+        private lateinit var mMediaPlayer2: MediaPlayer
 
         private lateinit var mSurfaceHolderCallback: SurfaceHolderCallback
+        private lateinit var mSurfaceHolderCallback2: SurfaceHolderCallback
 
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         override fun <V : IBaseView> attachView(v: V) {
             mVideoView = v as IVideoView
+            mMediaPlayer2 = MediaPlayer()
             mMediaPlayer = MediaPlayer()
             mMediaPlayer.setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).build())
+            mMediaPlayer2.setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).build())
             mSurfaceHolderCallback = SurfaceHolderCallback(mMediaPlayer)
+            mSurfaceHolderCallback2 = SurfaceHolderCallback(mMediaPlayer2)
+
+
+            mMediaPlayer2.setOnCompletionListener(this)
+            mMediaPlayer2.setOnPreparedListener(this)
+            mMediaPlayer2.setOnErrorListener(this)
+
             mMediaPlayer.setOnCompletionListener(this)
             mMediaPlayer.setOnPreparedListener(this)
             mMediaPlayer.setOnErrorListener(this)
@@ -53,6 +65,20 @@ interface VideoContact {
         }
 
         fun playVideo(position: Int) {
+            if (mMediaPlayer2.isPlaying) {
+                mMediaPlayer2.pause()
+                return
+            }
+            if (position > 0) this.position = checkPosition(position)
+            val v2 = ReadSdMedia.instance.getVideoLists()?.get(this.position + 1)
+//            mVideoView?.getBottomSurfaceView()?.holder?.setFormat(PixelFormat.TRANSPARENT)
+            mVideoView?.getBottomSurfaceView()?.setZOrderOnTop(true)
+            mVideoView?.getBottomSurfaceView()?.holder?.addCallback(mSurfaceHolderCallback2)
+            Lg.debug(tag, "path : ${v2?.path} , ${FileUtils.isFileExists(v2?.path)}")
+            mMediaPlayer2.setDataSource(v2?.path)
+            mMediaPlayer2.prepareAsync()
+
+
             if (mMediaPlayer.isPlaying) {
                 mMediaPlayer.pause()
                 return
@@ -63,6 +89,8 @@ interface VideoContact {
             Lg.debug(tag, "path : ${v?.path} , ${FileUtils.isFileExists(v?.path)}")
             mMediaPlayer.setDataSource(v?.path)
             mMediaPlayer.prepareAsync()
+
+
         }
 
         fun playNext() {
@@ -74,6 +102,13 @@ interface VideoContact {
 
         }
 
+        fun pause() {
+            if (mMediaPlayer.isPlaying) mMediaPlayer.pause()
+            if (mMediaPlayer2.isPlaying) mMediaPlayer2.pause()
+            mMediaPlayer.reset()
+            mMediaPlayer2.reset()
+        }
+
         private fun checkPosition(position: Int): Int {
             if (position < ReadSdMedia.instance.getVideoLists()?.size ?: 0) {
                 return position
@@ -82,10 +117,12 @@ interface VideoContact {
         }
 
         override fun onPrepared(mp: MediaPlayer?) {
-            Lg.debug(tag, "onPrepared...")
+            Lg.debug(tag, "onPrepared...${mp?.isPlaying}")
             mp?.currentPosition?.toLong()?.let { TimeUtils.millis2String(it) }
             mp?.duration?.toLong()?.let { TimeUtils.millis2String(it) }
-            if (!mp?.isPlaying!!) mp.start()
+            if (!mp?.isPlaying!!) {
+                mp.start()
+            }
             mp.isLooping = true
         }
 
@@ -94,7 +131,7 @@ interface VideoContact {
         }
 
         override fun onError(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
-
+            Lg.debug(tag, "what : $what, extra : $extra")
             return false
         }
 

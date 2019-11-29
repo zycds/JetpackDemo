@@ -1,8 +1,6 @@
 package com.zhangyc.library.base
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Debug
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,12 +31,9 @@ abstract class BaseFragment<P : IBasePresenter> : ProxyFragment() {
         if (id == null) return
     }
 
-    @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bTag = this::class.java.simpleName
-//        val traceName = "trace".plus(bTag)
-//        Debug.startMethodTracing(traceName)
         subscribe = RxBus.instance.toObservable(this, MsgEvent::class.java)
             .filter(object : io.reactivex.functions.Predicate<MsgEvent> {
                 override fun test(t: MsgEvent): Boolean {
@@ -64,9 +59,13 @@ abstract class BaseFragment<P : IBasePresenter> : ProxyFragment() {
         initData()
     }
 
+    override fun onPause() {
+        super.onPause()
+        pause()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-//        Debug.stopMethodTracing()
         if (subscribe?.isDisposed!!) subscribe?.dispose()
         unInit()
     }
@@ -78,6 +77,8 @@ abstract class BaseFragment<P : IBasePresenter> : ProxyFragment() {
     protected abstract fun initData()
 
     protected abstract fun refreshData()
+
+    protected open fun pause() {}
 
     protected abstract fun unInit()
 
