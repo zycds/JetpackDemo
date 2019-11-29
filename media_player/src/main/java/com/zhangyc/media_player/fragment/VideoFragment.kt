@@ -1,9 +1,9 @@
 package com.zhangyc.media_player.fragment
 
 import android.content.Context
-import android.view.SurfaceView
 import com.zhangyc.library.annotations.InjectPresenter
 import com.zhangyc.library.base.BaseFragment
+import com.zhangyc.library.db.ReadSdMedia
 import com.zhangyc.media_player.ConstantKey
 import com.zhangyc.media_player.R
 import com.zhangyc.media_player.mvp.VideoContact
@@ -29,7 +29,7 @@ class VideoFragment : BaseFragment<VideoContact.VideoPresenter>(), VideoContact.
 
             }
             R.id.playing->{
-                mPresenter.playVideo(-1)
+                mPresenter.playVideo()
             }
             R.id.skip_next->{
                 mPresenter.playNext()
@@ -50,8 +50,8 @@ class VideoFragment : BaseFragment<VideoContact.VideoPresenter>(), VideoContact.
 
     override fun initData() {
         setOnClickListeners(skip_next, skip_prev, fast_forward, fast_rewind, playing)
-        val position = arguments?.getInt(ConstantKey.KEY_MEDIA_CLICK_POSITION) ?: 0
-        mPresenter.playVideo(position)
+        mPresenter.position = arguments?.getInt(ConstantKey.KEY_MEDIA_CLICK_POSITION) ?: 0
+        surfaceViewAddCallback()
     }
 
     override fun refreshData() {
@@ -70,12 +70,9 @@ class VideoFragment : BaseFragment<VideoContact.VideoPresenter>(), VideoContact.
         return activity
     }
 
-    override fun getSurfaceView(): SurfaceView {
-        return surfaceView
+    override fun surfaceViewAddCallback() {
+        surfaceView.holder?.addCallback(mPresenter.getSurfaceCallback(mPresenter.mMediaPlayer))
+        surfaceView2.setZOrderOnTop(true)
+        surfaceView2.holder?.addCallback(mPresenter.getSurfaceCallback(mPresenter.mMediaPlayer2))
     }
-
-    override fun getBottomSurfaceView(): SurfaceView {
-        return surfaceView2
-    }
-
 }

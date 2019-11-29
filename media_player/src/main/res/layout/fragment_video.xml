@@ -10,14 +10,15 @@
             android:keepScreenOn="true"
             android:background="@android:color/darker_gray"
             android:layout_width="match_parent" android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.45"
+            app:layout_constraintHeight_percent="0.4"
+            android:layout_marginBottom="100dp"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     <SurfaceView
             android:id="@+id/surfaceView"
             android:keepScreenOn="true"
             android:layout_width="match_parent" android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.45"
+            app:layout_constraintHeight_percent="0.4"
             app:layout_constraintTop_toTopOf="parent"/>
 
     <View android:layout_width="match_parent" android:layout_height="0dp"
