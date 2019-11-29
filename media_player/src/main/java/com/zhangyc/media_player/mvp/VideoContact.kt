@@ -81,7 +81,8 @@ interface VideoContact {
 
         fun playNext() {
             pause()
-            prepareMediaPlayer(mMediaPlayer, getPositionPath(++position))
+            position = checkPosition(++position)
+            prepareMediaPlayer(mMediaPlayer, getPositionPath(position))
             prepareMediaPlayer(mMediaPlayer2, getPositionPath(position + 1))
         }
 
