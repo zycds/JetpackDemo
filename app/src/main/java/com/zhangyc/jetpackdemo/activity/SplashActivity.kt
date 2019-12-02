@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
+import com.bumptech.glide.Glide
 import com.zhangyc.imageloader.ImageLoader
 import com.zhangyc.jetpackdemo.R
 import com.zhangyc.library.annotations.InjectPresenter
@@ -21,6 +22,7 @@ import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.jetpackdemo.viewmodel.TestViewModel
 import com.zhangyc.library.RouterConstants
 import com.zhangyc.library.base.BaseActivity
+import com.zhangyc.library.event.Rx
 import com.zhangyc.library.event.RxTimer
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_splash.*
@@ -60,9 +62,12 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
     }
 
     override fun refreshData() {
-        ImageLoader.instance.with(this).load(url).default(R.mipmap.logo).into(getImageView())
+//        ImageLoader.instance.with(this).load(url).default(R.mipmap.logo).into(getImageView())
 //        ImageLoader.instance.with(this).loadFile(File("/sdcard/logo.jpg")).into(getImageView())
-//        Glide.with(this).load(url).into(getImageView())
+        Glide.with(this).load(url).into(getImageView())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Rx.zip()
+        }
     }
 
     override fun resume() {

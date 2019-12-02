@@ -19,6 +19,7 @@ import com.zhangyc.jetpackdemo.entities.Entities
 import com.zhangyc.jetpackdemo.mvp.MainFragmentContact
 import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.library.base.BaseFragment
+import com.zhangyc.library.event.Rx
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), MainFragmentContact.IMainFragmentView, SwipeRefreshLayout.OnRefreshListener {
