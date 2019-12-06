@@ -13,14 +13,15 @@ import androidx.viewpager.widget.ViewPager
 import com.zhangyc.jetpackdemo.R
 import com.zhangyc.jetpackdemo.adapters.MainViewPagerAdapter
 import com.zhangyc.jetpackdemo.adapters.PubAddressListAdapter
+import com.zhangyc.jetpackdemo.daggers.DaggerMainFragmentComponent
 import com.zhangyc.library.annotations.InjectPresenter
 import com.zhangyc.library.base.BaseAdapter
 import com.zhangyc.jetpackdemo.entities.Entities
 import com.zhangyc.jetpackdemo.mvp.MainFragmentContact
 import com.zhangyc.jetpackdemo.utils.Lg
 import com.zhangyc.library.base.BaseFragment
-import com.zhangyc.library.event.Rx
 import kotlinx.android.synthetic.main.fragment_main.*
+import javax.inject.Inject
 
 class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), MainFragmentContact.IMainFragmentView, SwipeRefreshLayout.OnRefreshListener {
 
@@ -28,12 +29,15 @@ class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), 
     lateinit var mPresenter: MainFragmentContact.MainFragmentPresenter
     private var lastVisibilityItem : Int = 0
 
+    @Inject
+    lateinit var mPubAddressListAdapter: PubAddressListAdapter
+
     override fun getLayoutResId(): Int {
         return R.layout.fragment_main
     }
 
     override fun init() {
-
+        DaggerMainFragmentComponent.builder().build().inject(this)
     }
 
     override fun initData() {
@@ -86,8 +90,7 @@ class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), 
             recyclerView_main.layoutManager = LinearLayoutManager(getActivityContext())
             val dividerItemDecoration = DividerItemDecoration(getActivityContext(), DividerItemDecoration.VERTICAL)
             recyclerView_main.addItemDecoration(dividerItemDecoration)
-            val pubAddressListAdapter = PubAddressListAdapter()
-            pubAddressListAdapter.setOnRecyclerOnItemClickListener(object :
+            mPubAddressListAdapter.setOnRecyclerOnItemClickListener(object :
                 BaseAdapter.OnItemClickListener<Entities.PubAddress> {
                 override fun itemClick(position: Int, data: Entities.PubAddress?) {
                     val bundle = Bundle()
@@ -97,13 +100,13 @@ class MainFragment : BaseFragment<MainFragmentContact.MainFragmentPresenter>(), 
                 }
             })
 
-            recyclerView_main.adapter = pubAddressListAdapter
+            recyclerView_main.adapter = mPubAddressListAdapter
             recyclerView_main.addOnScrollListener(object : RecyclerView.OnScrollListener(){
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     when(newState) {
                         RecyclerView.SCROLL_STATE_IDLE->{
-                            if (lastVisibilityItem + 1 == pubAddressListAdapter.itemCount){
+                            if (lastVisibilityItem + 1 == mPubAddressListAdapter.itemCount){
                                 Lg.debug(bTag, "loading more...")
                             }
                         }

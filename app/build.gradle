@@ -49,5 +49,6 @@ dependencies {
     kapt 'com.alibaba:arouter-compiler:1.2.1'
     implementation project(path: ':library')
     implementation project(path: ':imageloader')
+    kapt 'com.google.dagger:dagger-compiler:2.25.2'
     if (!rootProject.ext.mediaIsModule) implementation project(path : ':media_player')
 }

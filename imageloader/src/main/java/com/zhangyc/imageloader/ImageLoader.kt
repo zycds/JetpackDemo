@@ -12,6 +12,7 @@ class ImageLoader {
             ImageLoader()
         }
     }
+
     var context : Context? = null
     private var mBuilder : ImageRequest.Builder? = null
 

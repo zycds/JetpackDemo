@@ -62,9 +62,9 @@ class SplashActivity : BaseActivity<SplashContact.SplashPresenter>(), SplashCont
     }
 
     override fun refreshData() {
-//        ImageLoader.instance.with(this).load(url).default(R.mipmap.logo).into(getImageView())
+        ImageLoader.instance.with(this).load(url).default(R.mipmap.logo).into(getImageView())
 //        ImageLoader.instance.with(this).loadFile(File("/sdcard/logo.jpg")).into(getImageView())
-        Glide.with(this).load(url).into(getImageView())
+//        Glide.with(this).load(url).into(getImageView())
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Rx.zip()
         }
