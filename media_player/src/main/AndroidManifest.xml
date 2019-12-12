@@ -3,10 +3,10 @@
           package="com.zhangyc.media_player">
 
 
-
     <application tools:ignore="GoogleAppIndexingWarning,MissingApplicationIcon">
         <activity android:name=".media_activity.MediaActivity"
                 android:configChanges="screenSize|orientation|keyboardHidden"/>
+        <activity android:name=".media_activity.VideoActivity"/>
         <service android:name=".service.MusicService"/>
     </application>
 

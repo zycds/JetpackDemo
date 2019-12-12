@@ -1,5 +1,6 @@
 package com.zhangyc.media_player.mvp
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,7 @@ import com.zhangyc.media_player.ConstantKey
 import com.zhangyc.media_player.R
 import com.zhangyc.media_player.fragment.MediaContainerFragment
 import com.zhangyc.media_player.media_activity.MediaActivity
+import com.zhangyc.media_player.media_activity.VideoActivity
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.item_music.view.*
 
@@ -105,7 +107,8 @@ interface MediaContainerContact {
                         MediaTag.VIDEO -> R.id.videoFragment
                         MediaTag.PIC -> R.id.picFragment
                     }
-                    NavHostFragment.findNavController(mediaContainerFragment!!).navigate(resId, bundle)
+                    mMediaContainerView?.getActivityContext()?.startActivity(Intent(mMediaContainerView?.getActivityContext(), VideoActivity::class.java))
+//                    NavHostFragment.findNavController(mediaContainerFragment!!).navigate(resId, bundle)
                 }
             })
         }

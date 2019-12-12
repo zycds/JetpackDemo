@@ -1,13 +1,17 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+
+apply plugin: 'maven'
+apply plugin: 'com.novoda.bintray-release'
+
 android {
     compileSdkVersion 29
 
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
 
@@ -26,6 +30,9 @@ android {
         targetCompatibility = '1.8'
     }
 
+
+
+
 }
 
 dependencies {
@@ -39,4 +46,48 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.1.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.60'
+}
+
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+//配置需要上传到maven仓库的文件
+artifacts {
+    archives androidSourcesJar
+}
+
+/*uploadArchives {
+
+    *//*repositories.mavenDeployer {
+        repository(url : uri('../respository'))
+        pom.groupId = "com.zhangyc.imageloader"
+        pom.artifactId = "imageloader"
+        pom.version = "1.0.0"
+    }*//*
+
+    repositories {
+        mavenDeployer {
+            repository(url : "http://localhost:8081/repository/maven-releases/") {
+                authentication(userName: "zhangyc", password : "zhangyc1991")
+            }
+            pom.groupId = "com.zhangyc.imageloader"
+            pom.artifactId = "imageloader"
+            pom.version = "1.0.2"
+        }
+    }
+
+
+}*/
+//https://bintray.com/
+//gradle clean build bintrayUpload -PbintrayUser=zycds -PbintrayKey=f8a72c371a5086cc90d085be36f365500d737990 -PdryRun=false
+publish {
+    userOrg = 'ds520' //bintray账户下某个组织id
+    groupId = 'com.zhangyc' //maven仓库下库的包名，一般为模块包名
+    artifactId = 'imageloader' //项目名称
+    publishVersion = '1.0.2' //版本号
+    desc = 'imageloader for android' //项目介绍，可以不写
+    website = 'https://github.com/novoda/bintray-release'
 }

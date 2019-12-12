@@ -65,4 +65,5 @@ dependencies {
     kapt 'android.arch.persistence.room:compiler:1.1.1'
     kapt 'com.alibaba:arouter-compiler:1.2.1'
     implementation project(path: ':library')
+    implementation 'com.charonchui.vitamio:vitamio:4.2.2'
 }
