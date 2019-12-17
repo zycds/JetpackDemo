@@ -107,8 +107,8 @@ interface MediaContainerContact {
                         MediaTag.VIDEO -> R.id.videoFragment
                         MediaTag.PIC -> R.id.picFragment
                     }
-                    mMediaContainerView?.getActivityContext()?.startActivity(Intent(mMediaContainerView?.getActivityContext(), VideoActivity::class.java))
-//                    NavHostFragment.findNavController(mediaContainerFragment!!).navigate(resId, bundle)
+//                    mMediaContainerView?.getActivityContext()?.startActivity(Intent(mMediaContainerView?.getActivityContext(), VideoActivity::class.java))
+                    NavHostFragment.findNavController(mediaContainerFragment!!).navigate(resId, bundle)
                 }
             })
         }

@@ -31,6 +31,7 @@ interface WebActivityContact {
 
         fun loadUrl() {
             val url = "https://www.baidu.com"
+            mWebView.getWebView().loadUrl(url)
         }
 
         @SuppressLint("SetJavaScriptEnabled")

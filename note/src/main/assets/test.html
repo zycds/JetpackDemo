@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>菜鸟教程(runoob.com)</title>
+</head>
+<body>
+
+<script>
+            function changeImage()
+            {
+                element=document.getElementById('myimage')
+                if (element.src.match("bulbon"))
+                {
+                    <!--element.src="pic_bulboff.gif";-->
+                    alert("灯灭了");
+                    return "灯灭了";
+                }
+                else
+                {
+                    <!--element.src="pic_bulbon.gif";-->
+                    alert("灯亮了");
+                    return "灯亮了";
+                }
+            }
+            function callAndroid() {
+                <!-- android是对象映射时设置的名称 -->
+                alert("result : " + android.onResultSum(10));
+            }
+
+            function callAndroidByClient() {
+                document.location = "androidclient://onResultSum?arg=20";
+            }
+
+            function callAndroidByChrome() {
+                alert("WebChromeClient.")
+            }
+
+        </script>
+<img id="myimage"
+     src="pic_bulboff.gif" width="100" height="180">
+<button id="call_android" type="button" onclick="callAndroid()">调用Android方法</button>
+<button id="call_android_client" type="button" onclick="callAndroidByClient()">callAndroidByClient</button>
+<button id="call_android_chrome" type="button" onclick="callAndroidByChrome()">callAndroidByClient</button>
+</body>
+</html>

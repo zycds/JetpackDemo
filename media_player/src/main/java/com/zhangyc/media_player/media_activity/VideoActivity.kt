@@ -37,7 +37,7 @@ class VideoActivity : BaseActivity<VideoActivityContact.VideoPresenter>(), Media
         videoView.setOnCompletionListener(this)
         videoView.setOnErrorListener(this)
 
-        videoView.setVideoPath(testUrl2)
+        videoView.setVideoPath(testUrl)
     }
 
     override fun refreshData() {
