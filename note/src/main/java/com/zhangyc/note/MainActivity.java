@@ -2,7 +2,6 @@ package com.zhangyc.note;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,9 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
         myTimerTask.cancel();
         timer.cancel();
-
-
-        Looper.myLooper().quit();
 
     }
 
