@@ -16,4 +16,17 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
+    <com.zhangyc.note.view.TextThumbSeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="300dp" android:layout_height="wrap_content"
+            android:progress="10"
+            android:max="100"
+            android:maxHeight="10dp"
+            android:minHeight="6dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            android:progressDrawable="@drawable/progress"
+            android:layout_marginBottom="20dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

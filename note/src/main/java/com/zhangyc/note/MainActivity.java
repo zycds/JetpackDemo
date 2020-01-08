@@ -3,9 +3,11 @@ package com.zhangyc.note;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.zhangyc.note.view.TextThumbSeekBar;
 import com.zhangyc.note.web.OfficeActivity;
 
 import java.lang.ref.WeakReference;
@@ -35,12 +37,14 @@ public class MainActivity extends AppCompatActivity {
 
     private Handler mHandler;
 
+    private TextThumbSeekBar seekBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mHandler = new MainHandler(this);
-        startActivity(new Intent(this, OfficeActivity.class));
+//        startActivity(new Intent(this, OfficeActivity.class));
 
         MyTimerTask myTimerTask = new MyTimerTask();
         Timer timer = new Timer();
@@ -49,6 +53,14 @@ public class MainActivity extends AppCompatActivity {
         myTimerTask.cancel();
         timer.cancel();
 
+
+        seekBar = findViewById(R.id.seekBar);
+
+        seekBar.setMax(100);
+        seekBar.setProgress(20);
+        seekBar.setTextProgressSize(32f);
+
+        seekBar.setThumbOffset(0);
     }
 
 
