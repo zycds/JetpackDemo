@@ -56,11 +56,32 @@ public class MainActivity extends AppCompatActivity {
 
         seekBar = findViewById(R.id.seekBar);
 
-        seekBar.setMax(100);
-        seekBar.setProgress(20);
+        seekBar.setProgressDrawable(R.drawable.progress);
+
+        seekBar.setMax(99);
+        seekBar.setProgress(99);
+        seekBar.setProgressText((seekBar.getProgress() + 1) + "/" + (seekBar.getMax() + 1));
         seekBar.setTextProgressSize(32f);
 
         seekBar.setThumbOffset(0);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                MainActivity.this.seekBar.setProgressText((progress + 1) + "/" + (seekBar.getMax() + 1));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                MainActivity.this.seekBar.setProgress(seekBar.getProgress());
+                MainActivity.this.seekBar.setProgressText((seekBar.getProgress() + 1) + "/" + (seekBar.getMax() + 1));
+            }
+        });
     }
 
 
