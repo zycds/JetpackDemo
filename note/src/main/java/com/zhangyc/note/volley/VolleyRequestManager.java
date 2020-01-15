@@ -2,6 +2,7 @@ package com.zhangyc.note.volley;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.widget.ImageView;
 import com.android.volley.*;
 import com.android.volley.toolbox.*;
@@ -11,14 +12,16 @@ public class VolleyRequestManager implements Cache, Network {
 
     private static final String url = "https://www.wanandroid.com/";
 
+    private RequestQueue requestQueue;
+
     public VolleyRequestManager(Context context) {
 
 //        RequestQueue requestQueue = new RequestQueue(this, this);
 //        requestQueue.start();
 //        requestQueue.add(stringRequest);
 
-        RequestQueue requestQueue1 = Volley.newRequestQueue(context);
-        requestQueue1.add(stringRequest);
+          requestQueue = Volley.newRequestQueue(context);
+//        requestQueue1.add(stringRequest);
 
 
 //        NetworkImageView networkImageView = new NetworkImageView(context);
@@ -26,6 +29,10 @@ public class VolleyRequestManager implements Cache, Network {
 //        ImageLoader imageLoader = new ImageLoader(requestQueue1, new BitmapCache());
 //        imageLoader.get(url, imageListener);
 //        networkImageView.setImageUrl(url, imageLoader);
+    }
+
+    public void loadImage() {
+        requestQueue.add(imageRequest);
     }
 
     public class BitmapCache implements ImageLoader.ImageCache {
@@ -69,11 +76,10 @@ public class VolleyRequestManager implements Cache, Network {
     });
 
 
-    ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
+    ImageRequest imageRequest = new ImageRequest("http://b-ssl.duitang.com/uploads/item/201209/07/20120907181244_tGiNN.jpeg", new Response.Listener<Bitmap>() {
 
         @Override
         public void onResponse(Bitmap response) {
-
         }
     }, 0, 0, ImageView.ScaleType.CENTER, Bitmap.Config.RGB_565,
 
